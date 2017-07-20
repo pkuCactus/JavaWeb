@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block body %}
+<style type="text/css">
+  .page {height:100%;border: 5;margin-top: 0px;margin-bottom: 0;margin-right: auto;margin-left: auto;bottom: 0;}
+</style>
+  <h2 class="title">Login</h2>
+  {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('admin_login') }}" method="post" onsubmit="return check()" name="login_form">
+    <dl>
+      <dt>Username:
+      <dd><input type="text" name="username">
+      <dt>Password:
+      <dd><input type="password" name="password1">
+      <dd><input type="hidden" name="password">
+      <dd><input type="submit" value="Login">
+    </dl>
+  </form>
+<!-- <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script> -->
+<!-- <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script> -->
+<script src="//cdn.bootcss.com/crypto-js/3.1.2/components/core.js"></script>
+<script src="//cdn.bootcss.com/crypto-js/3.1.2/rollups/aes.js"></script>
+<!-- <script src="//cdn.bootcss.com/crypto-js/3.1.2/components/aes.js"></script> -->
+<script src="//cdn.bootcss.com/crypto-js/3.1.2/components/md5.js"></script>
+<script src="//cdn.bootcss.com/crypto-js/3.1.2/components/enc-base64.js"></script> 
+<script type="text/javascript">
+    function check(){
+      var uname = login_form.username.value;
+      if(uname==null||uname==""){
+        alert("username cannot be empty");
+        return false;
+      }
+      var passwd = login_form.password1.value;
+      if(passwd==null||passwd==""){
+        alert("Please input the password");
+        return false;
+      }
+      var n_passwd = CryptoJS.MD5(passwd);
+      login_form.password.value = n_passwd;
+      return true;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!doctype html>
+<title>Manage</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+<div class="page">
+  <h1>Manage</h1>
+  <div class="metanav">
+  {% if not session.username %}
+    <h4><a href="{{ url_for('admin_login') }}">log in</a></h4>
+  {% else %}
+    <h4><a href="{{ url_for('logout') }}">log out</a></h4>
+  {% endif %}
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class="flash" style="margin-bottom: 10px;">{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>

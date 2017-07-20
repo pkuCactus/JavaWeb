@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>course introduction</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<style type="text/css">
+	{% if not param.is_mobile %}
+	html, body {
+        margin:0;    /* 必要，否则纵向滚动条不会消失 */
+        height:98%; /* 必要，以便之后给container设置高度百分比 */
+    }
+    {% endif %}
+	#container {
+        min-height:100%; /* 此属性需要doctype的支持，见第一行。 否则不会生效。在IE中，写height：100%就可以工作，但其他浏览器需要设置min-height。*/
+        position:relative; /* 必要 */
+        margin-top: 0;
+    }
+    {% if not param.is_mobile %}
+    .page {width:56%;height:100%;border: 2px;margin-top: 0px;margin-bottom: 0;margin-right: auto;margin-left: auto;}
+    {% else %}
+    .page {width:98%;height:100%;border: 2px;margin-top: 0px;margin-bottom: 0;margin-right: auto;margin-left: auto;}
+    {% endif %}
+    </style>
+</head>
+<body>
+<div class="page">
+<h1>课程简介</h1>
+<p>
+&emsp;&emsp;《文科计算机基础》是文科学生的一门公共必修课，有14个教学班，其中基础班2个（班号为1-2，每班80人），普通班9个（班号为3～11，每班人数130人）；实验班3个（《文科计算机基础实验班（上）》，每班人数60人）。
+<ul>
+<li>实验班：面向具有较高基础的学生，通过程序设计等方式来培养计算思维、数据处理、文理综合能力，也具有培养并选拔“北京大学计算机应用设计竞赛”的学生的作用。</li>
+<li>基础班：面向基础水平较薄弱的学生。</li>
+<li>普通班：是实验班及基础班之外的普通学生。</li>
+
+</ul>
+
+&emsp;&emsp;本问卷及测试是帮助同学们较好地选择不同的班次。问卷及测试结果主要用于：
+<ul>
+<li>（1） 为同学们提供选课建议；</li>
+<li>（2） 提供给任课老师，用于确定基础班、实验班的人选；</li>
+<li>（3） 了解同学们的基础情况，有利于任课老师因材施教。</li>
+</ul>
+
+&emsp;&emsp;问卷及测试分三部分，第O部分是调查问卷（15个问题），第1部分是计算机原理与应用（45个选择题），第2部分是程序设计基础知识（15个选择题）。<br><br>
+&emsp;&emsp;请同学们按照实际情况做答，由于是测试已有基础，而后根据答题结果建议你选则相应的班级层级，所以如实作答即可，不会的题目不需要选择答案。<br><br>
+&emsp;&emsp;请在60分钟以内完成问卷及测试，建议在电脑上进行答题操作（手机上操作也可以，但不太方便）。
+<br><br><br>
+<div style="text-align: right;font-size: 12;margin-top: 60;"><span><a href="{{url_for('index')}}"><b>开始答题</b></a></span></div>
+</p>
+</div>
+</body>
+<script type="text/javascript">
+	// $(document).onbeforeprint(function(){
+	// 	// var contentHeight = document.body.scrollHeight,//网页正文全文高度
+ //  //  	            winHeight = window.innerHeight;//可视窗口高度，不包括浏览器顶部工具栏
+ //  //  	    $(".page").css("min-height", winHeight);
+	// });
+</script>
+</html>

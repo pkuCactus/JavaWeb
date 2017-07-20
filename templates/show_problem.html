@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Java course test">
+
+    <title>Peking University Java</title>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='jquery-2.1.1.min.js')}}"></script>
+   <script src="{{url_for('static', filename='jquery.min.js')}}" type="text/javascript"></script>
+   <!-- <script>window.jQuery || document.write("<script src=\"{{url_for('static', filename='jquery-2.1.1.min.js')}}\"><\/script>")</script> -->
+	<script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
+    <style type="text/css">
+	    #container {
+	        min-height:100%; /* 此属性需要doctype的支持，见第一行。 否则不会生效。在IE中，写height：100%就可以工作，但其他浏览器需要设置min-height。*/
+	        position:relative; /* 必要 */
+	    }
+	    #body {
+	        padding-bottom:50px;    /* 等于footer的高度 */
+	        height:100%;
+	        border:solid 1px red;
+	    }
+
+    </style>
+    <style type="text/css">
+        .form-bg{
+            background: #00b4ef;
+        }
+        .form-horizontal{
+            background: #fff;
+            padding-bottom: 40px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .form-horizontal .heading{
+            display: block;
+            font-size: 35px;
+            font-weight: 700;
+            padding: 35px 0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 30px;
+        }
+        .form-horizontal .form-group{
+            padding: 0 40px;
+            margin: 0 0 25px 0;
+            position: relative;
+        }
+        .form-horizontal .form-control{
+            background: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            box-shadow: none;
+            padding: 0 20px 0 45px;
+            height: 40px;
+            transition: all 0.3s ease 0s;
+        }
+        .form-horizontal .form-control:focus{
+            background: #e0e0e0;
+            box-shadow: none;
+            outline: 0 none;
+        }
+        .form-horizontal .form-group i{
+            position: absolute;
+            top: 12px;
+            left: 60px;
+            font-size: 17px;
+            color: #c8c8c8;
+            transition : all 0.5s ease 0s;
+        }
+        .form-horizontal .form-control:focus + i{
+            color: #00b4ef;
+        }
+        .form-horizontal .fa-question-circle{
+            display: inline-block;
+            position: absolute;
+            top: 12px;
+            right: 60px;
+            font-size: 20px;
+            color: #808080;
+            transition: all 0.5s ease 0s;
+        }
+        .form-horizontal .fa-question-circle:hover{
+            color: #000;
+        }
+        .form-horizontal .main-checkbox{
+            float: left;
+            width: 20px;
+            height: 20px;
+            background: #11a3fc;
+            border-radius: 50%;
+            position: relative;
+            margin: 5px 0 0 5px;
+            border: 1px solid #11a3fc;
+        }
+        .form-horizontal .main-checkbox label{
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        .form-horizontal .main-checkbox label:after{
+            content: "";
+            width: 10px;
+            height: 5px;
+            position: absolute;
+            top: 5px;
+            left: 4px;
+            border: 3px solid #fff;
+            border-top: none;
+            border-right: none;
+            background: transparent;
+            opacity: 0;
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+        .form-horizontal .main-checkbox input[type=checkbox]{
+            visibility: hidden;
+        }
+        .form-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+            opacity: 1;
+        }
+        .form-horizontal .text{
+            float: left;
+            margin-left: 7px;
+            line-height: 20px;
+            padding-top: 5px;
+            text-transform: capitalize;
+        }
+        .form-horizontal .btn{
+            float: right;
+            font-size: 14px;
+            color: #fff;
+            background: #00b4ef;
+            border-radius: 30px;
+            padding: 0px 0px;
+            border: none;
+            text-transform: capitalize;
+            transition: all 0.5s ease 0s;
+        }
+        .col-sm-2 {
+          font-size: 16px;
+          vertical-align: text-bottom;
+        }
+        #ontopDiv{
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 4px;
+          z-index: 10000;
+          background-color: #eeeeee;/*#ffffc3;*/
+          border-width: 0px;
+          border-style: solid;
+          padding: 0px;
+          font-size: 5px;
+        }
+        #ontopDiv1 {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 4px;
+          z-index: 10000;
+          background-color: #eeeeee;/*#ffffc3;*/
+          border-width: 0px;
+          border-style: solid;
+          padding: 0px;
+          font-size: 5px;
+        }
+        @media only screen and (max-width: 479px){
+            .form-horizontal .form-group{
+                padding: 0 25px;
+            }
+            .form-horizontal .form-group i{
+                left: 45px;
+            }
+            .form-horizontal .btn{
+                padding: 0px 0px;
+            }
+        }
+    </style>
+    <style>
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height:1.5em;
+      color: #232323;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    h1, h2, h3 {
+      font-family: Times, serif;
+      line-height:1.5em;
+      border-bottom: 1px solid #ccc;
+    }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet prefetch" type="text/css" href="{{ url_for('static', filename='animate.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='loading.css') }}">
+    <!-- <link rel="stylesheet prefetch" type="text/css" href="{{ url_for('static', filename='default.css') }}">
+    <link rel="stylesheet prefetch" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel='stylesheet prefetch' href='http://fonts.useso.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,100,400,300,600,700,800'> -->
+    <style type="text/css">
+    {% set w = 0 %}
+    {% if param.is_mobile %}
+    {% set w = 100 %}
+    {% else %}
+    {% set w = 56 %}
+    {% endif %}
+      .page {width: {{w}}%;height:100%;border: 2px;margin-top: 0px;margin-bottom: 0;}
+      .title {margin: 0px 0px 10px 10px;}
+      .row {margin-left: 6px;}
+      .option_item{margin: 10px 0px 16px 5px;}
+      .inputs {margin-left: 36px;vertical-align: bottom;}
+      .plink a:link{color:white;text-decoration: none;}
+      .plink a:visited{color: white;}
+      .plink a:hover{color: blue;}
+      .plink a:active{color: blue;}
+      a.p:link,a.p:visited,a.p:hover,a.p:active{
+        text-decoration: none;
+       /* color: cyan;*/
+      }
+      a.p:visited{
+        color: cyan;
+      }
+      a.p1:hover,a.p1:active,a.p2:hover,a.p2:active,a.p3:hover,a.p3:active{
+        color: red;
+        font-size: 120%;
+      }
+    {% if not param.is_mobile %}
+      .navigation{
+        text-align: center;
+        position: fixed;
+        left: 20px;
+        top:10%;
+        font-size: 20px;
+        font-weight: 4;
+        width:120px;
+        /*background: #00fbfb;*/
+      }
+      
+      .part1{
+        margin-top:20px;
+        background: #ffeeee;
+        height: 50px;
+        line-height: 50px;
+        font-size: 40px;
+      }
+      .part2{
+        margin-top:20px;
+        background: #eeeeee;
+        height: 50px;
+        line-height: 50px;
+      }
+      .part3{
+        margin-top:20px;
+        margin-bottom: 20px;
+        background: #eeeeee;
+        height: 50px;
+        line-height: 50px;
+      }
+    {% else %}
+      .navigation{
+        position: fixed;
+        left: 0px;
+        font-size: 20px;
+        bottom: 0px;
+        font-weight: 4;
+        width: 100%;
+        background: #eeeeee
+      }
+      .part1{
+        display: inline-block;
+        /*vertical-align: top;*/
+        /*margin-top:20px;*/
+        height: 50px;
+        line-height: 50px;
+        font-size: 40px;
+        margin-left: 20px;
+        background: #ffeeee;
+      }
+      .part2{
+        display: inline-block;
+        vertical-align: top;
+        height: 50px;
+        line-height: 50px;
+        background: #eeeeee;
+      }
+      .part3{
+        display: inline-block;
+        vertical-align: top;
+        height: 50px;
+        line-height: 50px;
+        background: #eeeeee;
+      }
+    {% endif %}
+    </style>
+    <script type="text/javascript">
+    	var index = 0, index1 = 0;
+      {% if param.question_num % param.numperpage == 0 %}
+      {% set pages = param.question_num//param.numperpage %}
+      {% set pages1 = param.question_num1//param.numperpage %}
+      {% else %}
+      {% set pages = param.question_num//param.numperpage + 1 %}
+      {% set pages1 = param.question_num1//param.numperpage + 1 %}
+      {% endif %}
+      var pages = {{pages}};
+      var pages1 = {{pages1}};
+    	$(document).ready(function(){
+    		$('#all').html(pages);
+        $('#all1').html(pages1);
+    		$('#cur').html(index+1);
+        $('#cur1').html(index1+1);
+    		var w = $('#par').width();
+        // var w1 = $('.pre').width();
+        // var w2 = $('.nxt').width();
+        var w3 = $('.box').width();
+        {% if param.is_mobile %}
+        // var wa = -10;
+        var w2 = $('.nxt').width();
+        {% else %}
+        // var wa = 0;
+        var w2 = 0;
+        {% endif %}
+    		$('.box').css('margin-right',w/2+w3/2-w2/2)//(w-w1-w2-w3-wa)/2);
+    		$('#confirm').click(function () {
+		        event.preventDefault();
+		        var darken = "<div class='darken' style='display:none;'></div>";
+		        $('body').prepend(darken);
+		        $('.darken').delay().show(0).animate({ opacity: 0.8 }, 'fast');
+		        $('.thanks').removeClass('hide').addClass('fadeInDownBig');
+		    });
+        $('#nxt_part').click(function(){
+          // var block = document.getElementsByName("block1");
+          // block[0].className="activated";
+          // for(i=1;i<block.length;++i)block[i].className="hide"
+          show(3);
+        });
+        if(pages==1){
+          $('#nxt').removeClass('fadeInUp').addClass('hide');
+          $('#nxt_part').removeClass('hide');
+        }
+        if(pages1==1){
+          $('#confirm').removeClass("hide");
+          $('#nxt1').addClass('hide');
+        }
+		    $('#nxt').click(function () {
+          window.location.href="#top";
+          var block = document.getElementsByName("block");
+          block[index].className="hide";
+          block[index+1].className="activated";
+		    	if(index == 0)$('#pre').removeClass('hide fadeOutDown')/*.addClass('fadeInUp')*/;
+		    	index += 1;
+		    	if(index >= pages - 1){
+		    		$('#nxt').removeClass('fadeInUp').addClass('hide fadeOutDown');
+		    		$('#nxt_part').removeClass('hide');
+		    	}
+		    	if(index+1 <= pages)$('#cur').html(index+1);
+		    });
+        $('#nxt1').click(function () {
+          window.location.href="#top1";
+          var block = document.getElementsByName("block1");
+          block[index1].className="hide";
+          block[index1+1].className="activated";
+          if(index1 == 0)$('#pre1').removeClass('hide fadeOutDown')/*.addClass('fadeInUp')*/;
+          index1 += 1;
+          if(index1 >= pages1 - 1){
+            $('#nxt1').removeClass('fadeInUp').addClass('hide fadeOutDown');
+            $('#confirm').removeClass('hide');
+          }
+          if(index1+1 <= pages1)$('#cur1').html(index+1);
+        });
+		    $('#pre').click(function () {
+          window.location.href="#top";
+          var block = document.getElementsByName("block");
+          block[index].className="hide";
+          block[index-1].className="activated";
+		    	if(index <= pages - 1){
+		    		$('#nxt').removeClass('hide fadeOutDown')/*.addClass('fadeInUp')*/;
+		    		$('#nxt_part').addClass('hide');
+		    	}
+		    	index -= 1;
+		    	if(index == 0){
+		    		$('#pre').removeClass('fadeInUp').addClass('hide fadeOutDown');
+		    	}
+		    	$('#cur').html(index+1);
+		    });
+        $('#pre1').click(function () {
+          window.location.href="#top1";
+          var block = document.getElementsByName("block1");
+          block[index1].className="hide";
+          block[index1-1].className="activated";
+          if(index1 <= pages1 - 1){
+            $('#nxt1').removeClass('hide fadeOutDown')/*.addClass('fadeInUp')*/;
+            $('#confirm').addClass('hide');
+          }
+          index1 -= 1;
+          if(index1 == 0){
+            $('#pre1').removeClass('fadeInUp').addClass('hide fadeOutDown');
+          }
+          $('#cur1').html(index1+1);
+        });
+    	});
+      function show(part){
+        if(part == 1){
+          $("#part1").removeClass("hide");$(".part1").css("font-size","40px");
+          $("#part2").addClass("hide");$(".part2").css("font-size","20px");
+          $("#part3").addClass("hide");$(".part3").css("font-size","20px");
+          $(".part1").css("background","#ffeeee");
+          $(".part2").css("background","#eeeeee");
+          $(".part3").css("background","#eeeeee");
+        }
+        else if(part == 2){
+          $("#part2").removeClass("hide");$(".part2").css("font-size","40px");
+          $("#part1").addClass("hide");$(".part1").css("font-size","20px");
+          $("#part3").addClass("hide");$(".part3").css("font-size","20px");
+          $(".part1").css("background","#eeeeee");
+          $(".part2").css("background","#ffeeee");
+          $(".part3").css("background","#eeeeee");
+        }
+        else if(part == 3){
+          $("#part3").removeClass("hide");$(".part3").css("font-size","40px");
+          $("#part2").addClass("hide");$(".part2").css("font-size","20px");
+          $("#part1").addClass("hide");$(".part1").css("font-size","20px");
+          $(".part1").css("background","#eeeeee");
+          $(".part2").css("background","#eeeeee");
+          $(".part3").css("background","#ffeeee");
+        }
+      }
+    </script>
+</head>
+<body>
+   <!-- Begin page content -->
+   <div class="navigation">
+     <div class="part1"><a class="p p1" href="javascript:void(0)" onclick="show(1)">part1</a></div>
+     <div class="part2"><a class="p p2" href="javascript:void(0)" onclick="show(2)">part2</a></div>
+     <div class="part3"><a class="p p3" href="javascript:void(0)" onclick="show(3)">part3</a></div>
+   </div>
+
+   <!-- part1 -->
+   <div id="part1">
+   <!-- <div><h1>第1部分:计算机使用情况的问卷调查</h1></div> -->
+     <iframe id="iframe1" height="1000" width="99%"  src="https://wj.qq.com/s/779196/4333" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+   </div>
+   <!-- end part1 -->
+
+<!-- part2 -->
+   <div id="part2" class="hide">
+   <div class="container page container-fluid table-class">
+   <div class="progress" id="ontopDiv">
+       <div class="progress-bar" id="bar" style="width: 0%;margin-top: 0px;"> <span class="sr-only">60% Complete</span> </div>
+   </div>
+   <div class="page-header" style="margin-top:0px;" id="top" name="top">
+        <p>欢迎您,{{param.user[0]}}的同学,{{param.user[1]}} {{param.user[2]}}!<a href="{{url_for('index')}}" style="float: right;">返回</a></p>
+        <h2><p><center><a href="http://www.pku.edu.cn" target="new_blank">北京大学</a> 《文科计算机基础》课前测试及选课指导 </center></p></h2>
+   </div>
+  
+   {% for j in k|slice(pages or 1) %}
+   <div name="block" class="hide">
+   {% set j = loop.index0 %}
+   {% for i in items|slice(param.numperpage)%}
+   {% set kth = j * param.numperpage + loop.index0 %}
+   {% if kth >= param.question_num %}
+   {% else %}
+   <div class="row">
+   <div>
+     <div class="title"><h4>{{kth}}. &nbsp; {{param.question[kth].title}}? &emsp;[{{param.question[kth].type}}]</h4></div>
+    {% if param.question[kth].type != 'option answer' %}
+    {% set k = 1 %}
+    {% for option in param.question[kth].option %}
+     <div class="inputs">
+    <span class="option_item">
+    {% if param.question[kth].type == 'single select' %}
+     <input type="radio" name="ques{{kth}}" id="q{{kth}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress(this)"> &nbsp;
+    {% else %}
+    <input type="checkbox" name="ques{{kth}}" id="q{{kth}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress(this)"> &nbsp;
+    {% endif %}
+     <label for="q{{kth}}-{{k}}"> &nbsp;{{option}}</label>
+     </span>
+    </div>
+    {% set k=k+1 %}
+    {% endfor %}
+    {% else %}
+    <textarea class="form-control" name="ques{{kth}}" id="q{{kth}}" style="margin-top: 20px;width: 90%;margin-left: 5%;" rows="6" placeholder="your suggestions" oninput="show_progress(this)"></textarea>
+    {% endif %}
+    </div>
+    </div>
+   {% endif %}
+   {% endfor %}
+   </div>
+   {% endfor %}
+
+<div style="margin-top: 20px;bottom: 0;">
+   <button class="rule1 btn btn-default btn-lg pre animated hide fadeOutDown" id="pre"><span class="plink"><a href="#top">Previous</a></span> <span class="icon-next"></span></button>
+   
+   <button class="rule2 btn btn-default btn-lg nxt animated" id="nxt"><span class="plink"><a href="#top">Next</a></span> <span class="icon-next"></span></button>
+   <input type="submit" id="nxt_part" name="submit" class="btn btn-default btn-lg hide rule2" value="下一部分">
+   <div class="control-label box"><label id='cur' style="text-align: bottom;"></label> / <label id='all' style="text-align: bottom;"></label></div>
+</div>
+
+   <div id="footer" class="hide" style="margin-left: auto;margin-right: auto;width:{{w}}%;">
+      <center><label><h5 style="boder-bottom:10px solid #eee;">Copyright &copy; Peking University JianzhongHe 2017</h5></label></center>
+   </div>
+</div>
+</div>
+<!-- end part2 -->
+
+<!-- part3 -->
+<div id="part3" class="hide">
+   <div class="container page container-fluid table-class">
+   <div class="progress" id="ontopDiv1">
+       <div class="progress-bar" id="bar1" style="width: 0%;margin-top: 0px;"> <span class="sr-only">60% Complete</span> </div>
+   </div>
+   <div class="page-header" style="margin-top:0px;" id="top1" name="top1">
+        <p>欢迎您,{{param.user[0]}}的同学,{{param.user[1]}} {{param.user[2]}}!<a href="{{url_for('index')}}" style="float: right;">返回</a></p>
+        <h2><p><center><a href="http://www.pku.edu.cn" target="new_blank">北京大学</a> 《文科计算机基础》课前测试及选课指导 </center></p></h2>
+   </div>
+  
+   {% for j in k|slice(pages1 or 1) %}
+   <div name="block1" class="hide">
+   {% set j = loop.index0 %}
+   {% for i in items|slice(param.numperpage)%}
+   {% set kth = j * param.numperpage + loop.index0 %}
+   {% if kth >= param.question_num1 %}
+   {% else %}
+   <div class="row">
+   <div>
+     <div class="title"><h4>{{kth}}. &nbsp; {{param.question1[kth].title}}? &emsp;[{{param.question1[kth].type}}]</h4></div>
+    {% if param.question1[kth].type != 'option answer' %}
+    {% set k = 1 %}
+    {% for option in param.question1[kth].option %}
+     <div class="inputs">
+    <span class="option_item">
+    {% if param.question1[kth].type == 'single select' %}
+     <input type="radio" name="ques1{{kth}}" id="q1-{{kth}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress1(this)"> &nbsp;
+    {% else %}
+    <input type="checkbox" name="ques1{{kth}}" id="q1-{{kth}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress1(this)"> &nbsp;
+    {% endif %}
+     <label for="q1-{{kth}}-{{k}}"> &nbsp;{{option}}</label>
+     </span>
+    </div>
+    {% set k=k+1 %}
+    {% endfor %}
+    {% else %}
+    <textarea class="form-control" name="ques1{{kth}}" id="q1-{{kth}}" style="margin-top: 20px;width: 90%;margin-left: 5%;" rows="6" placeholder="your suggestions" oninput="show_progress1(this)"></textarea>
+    {% endif %}
+    </div>
+    </div>
+   {% endif %}
+   {% endfor %}
+   </div>
+   {% endfor %}
+
+<!-- the button of the part3 -->
+<div style="margin-top: 20px;bottom: 0;">
+   <button class="rule1 btn btn-default btn-lg pre animated hide fadeOutDown" id="pre1"><span class="plink"><a href="#top1">Previous</a></span> <span class="icon-next"></span></button>
+   
+   <button class="rule2 btn btn-default btn-lg nxt animated" id="nxt1"><span class="plink"><a href="#top1">Next</a></span> <span class="icon-next"></span></button>
+   <input type="submit" id="confirm" name="submit" class="btn btn-default btn-lg hide rule2" value="提交">
+   <div class="control-label box"><label id='cur1' style="text-align: bottom;"></label> / <label id='all1' style="text-align: bottom;"></label></div>
+</div>
+
+</div>
+</div>
+<!-- end part3 -->
+
+<div class="animated thanks hide">
+ <h1 style="font-weight:100; font-size:48px; width:80%;margin: 0 auto;border-bottom: none;">你确定提交结果了吗?</h1>
+ <button class="btn btn-lg btn-success" style="margin:20px;" onclick="submit_ans()">确认</button>
+ <button class="btn btn-lg btn-success" onclick="cancel(this)">取消</button>
+</div>
+<div class="load-wrapp hide">
+<div class="load-9">
+  <p style="color: #ff0000;font-size: 20;">submitting to the server ... </p>
+  <div class="spinner">
+    <div class="bubble-1"></div>
+    <div class="bubble-2"></div>
+  </div>
+</div>
+</div>
+
+<style type="text/css">
+	.rule1{width:160px;float:left;display: inline-block;margin-left: 20px;margin-bottom:55px;}
+	.rule2{width:160px;float:right;display: inline-block;margin-right: 20px;margin-bottom:55px;}
+	.box{width:160px;float: right;display: inline-block;text-align: bottom;}
+  input[type="submit"]:hover{
+    color: blue;
+  }
+</style>
+<script src="{{url_for('static', filename='jquery-1.11.1.min.js')}}"></script>
+<script type="text/javascript">
+   function submit_ans(){
+    $(".thanks").addClass("hide");
+    $(".load-wrapp").removeClass('hide');
+    $.post("{{url_for('result')}}", ans,
+    function(data){
+      document.write(data);
+    });
+   }
+   var ans={};
+   function show_progress(obj){
+   	var question_num = {{param.question_num}};
+    var w = $('#ontopDiv').width();
+    var w_c = $('#bar').width();
+   	// var nm = obj.name;
+   	// var value = obj.value;
+    // var l1 = $("input[type='radio']:checked").length;
+    // var l2 = $("input[type='checkbox']:checked").length;
+    // var textarea = document.getElementsByTagName('textarea');
+    // for(var i=0;i<textarea.length;i++){
+    //   alert(textarea[i].val());
+    // }
+    // alert([$('.progress-bar').css("width"),$('.progress').width()]);
+    // alert(ans[obj.name]);
+    if(obj.type=='radio'){
+      if(!ans[obj.name])var progress = w_c/w + 1/question_num;
+      ans[obj.name] = obj.value;
+      // var x="input[type='radio'][name='".concat(obj.name+"']:checked");
+    }
+    if(obj.type=='checkbox'){
+      var x="input[type='checkbox'][name='".concat(obj.name+"']:checked");
+      // alert($(x).length);
+      var t_ans = [];
+      $(x).each(function(){
+        t_ans.push($(this).val());
+      });
+      // alert(t_ans);
+      if($(x).length>=1){
+        if(!ans[obj.name])var progress = w_c/w + 1/question_num;
+        ans[obj.name] = t_ans;
+      }
+      if($(x).length==0&&ans[obj.name]){
+        ans[obj.name] = null;
+        var progress = w_c/w - 1/question_num;
+      }
+    }
+    // alert(obj.value);
+    if(obj.tagName=='TEXTAREA'){
+      if(obj.value==''&&ans[obj.name]){
+        ans[obj.name] = null;
+        var progress = w_c/w - 1/question_num;
+      }
+      if(obj.value!=''){
+        if(!ans[obj.name])var progress = w_c/w + 1/question_num;
+        ans[obj.name] = obj.value;
+      }
+    }
+   	// var progress = (l1 + l2) / question_num * 100;
+    progress = progress * 100;
+    $('#bar').css('width', progress + '%');
+   }
+   function show_progress1(obj){
+    var question_num = {{param.question_num1}};
+    var w = $('#ontopDiv1').width();
+    var w_c = $('#bar1').width();
+    // var nm = obj.name;
+    // var value = obj.value;
+    // var l1 = $("input[type='radio']:checked").length;
+    // var l2 = $("input[type='checkbox']:checked").length;
+    // var textarea = document.getElementsByTagName('textarea');
+    // for(var i=0;i<textarea.length;i++){
+    //   alert(textarea[i].val());
+    // }
+    // alert([$('.progress-bar').css("width"),$('.progress').width()]);
+    // alert(ans[obj.name]);
+    if(obj.type=='radio'){
+      if(!ans[obj.name])var progress = w_c/w + 1/question_num;
+      ans[obj.name] = obj.value;
+      // var x="input[type='radio'][name='".concat(obj.name+"']:checked");
+    }
+    if(obj.type=='checkbox'){
+      var x="input[type='checkbox'][name='".concat(obj.name+"']:checked");
+      // alert($(x).length);
+      var t_ans = [];
+      $(x).each(function(){
+        t_ans.push($(this).val());
+      });
+      // alert(t_ans);
+      if($(x).length>=1){
+        if(!ans[obj.name])var progress = w_c/w + 1/question_num;
+        ans[obj.name] = t_ans;
+      }
+      if($(x).length==0&&ans[obj.name]){
+        ans[obj.name] = null;
+        var progress = w_c/w - 1/question_num;
+      }
+    }
+    // alert(obj.value);
+    if(obj.tagName=='TEXTAREA'){
+      if(obj.value==''&&ans[obj.name]){
+        ans[obj.name] = null;
+        var progress = w_c/w - 1/question_num;
+      }
+      if(obj.value!=''){
+        if(!ans[obj.name])var progress = w_c/w + 1/question_num;
+        ans[obj.name] = obj.value;
+      }
+    }
+    // var progress = (l1 + l2) / question_num * 100;
+    progress = progress * 100;
+    $('#bar1').css('width', progress + '%');
+   }
+   function cancel(obj){
+    $(obj.parentNode).removeClass("fadeInDownBig").addClass("hide");
+    $(".darken").remove();
+   }
+   	$(function(){
+   		// alert($("input[type='radio'][name='ques1']:checked").val());
+        var x = document.getElementsByName("block");
+        var x1 = document.getElementsByName("block1");
+        x1[0].className = "activated";
+        x[0].className = "activated";
+   	    function footerPosition(){
+   	        $("#footer").css("position", "fixed");
+   	        var contentHeight = document.body.scrollHeight,//网页正文全文高度
+   	            winHeight = window.innerHeight;//可视窗口高度，不包括浏览器顶部工具栏
+   	        $(".page").css("min-height", winHeight);
+   	        if(contentHeight > winHeight){
+   	            //当网页正文高度小于可视窗口高度时，为footer添加类fixed-bottom
+   	            $("#footer").css("position",  "relative");
+   	            $("#footer").css("height", "30px");
+                $("#footer").css("margin-top", "80px");
+   	            $("hr").css("text-align","right");
+   	            $("hr").css("width", $(".page").width())
+   	        }
+            {% if param.is_mobile %}
+            // $("#footer").css("position", "fixed");
+            $(".btn").css("padding","10px 5px");
+            $("#footer").css("height", "60px");
+            $("#footer").css("margin-top", "20px");
+            $(".rule1").css("width", "84px");
+            $(".rule2").css("width", "84px");
+            $(".box").css("width", "84px");
+            {% endif %}
+   	    }
+   	    footerPosition();
+   	    $(window).resize(footerPosition);
+   	});
+   </script>
+</body>
+</html> 

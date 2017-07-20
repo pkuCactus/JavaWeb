@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ch">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="java course">
+    <meta name="author" content="JianzhongHe">
+
+    <title>Peking University Java</title>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    {% for js in jsfile %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/{{js}}"></script>
+    {% endfor %}
+
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <!-- Script to instantly classify an image once it is uploaded. -->
+    <script type="text/javascript">
+    </script>
+    
+    <style type="text/css">
+    html, body {
+        margin:0;    /* 必要，否则纵向滚动条不会消失 */
+        height:100%; /* 必要，以便之后给container设置高度百分比 */
+    }
+    #container {
+        min-height:100%; /* 此属性需要doctype的支持，见第一行。 否则不会生效。在IE中，写height：100%就可以工作，但其他浏览器需要设置min-height。*/
+        position:relative; /* 必要 */
+    }
+    #body {
+        padding-bottom:50px;    /* 等于footer的高度 */
+        height:200px;
+        border:solid 1px red;
+    }
+    #footer {
+    	  /*margin-bottom: 5px;*/
+        position:absolute; /* 必要 */
+        bottom:0; /* 必要 */
+        height:50px
+    }
+    </style>
+    <style type="text/css">
+        .form-bg{
+            background: #00b4ef;
+        }
+        .form-horizontal{
+            background: #fff;
+            padding-bottom: 40px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .form-horizontal .heading{
+            display: block;
+            font-size: 35px;
+            font-weight: 700;
+            padding: 35px 0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 30px;
+        }
+        .form-horizontal .form-group{
+            padding: 0 0px;
+            margin: 0 0 25px 0;
+            position: relative;
+        }
+        .form-horizontal .form-control{
+            background: #f0f0f0;
+            border: none;
+            border-radius: 16px;
+            box-shadow: none;
+            padding: 0 10px 0 10px;
+            height: 40px;
+            transition: all 0.3s ease 0s;
+        }
+        .form-horizontal .form-control:focus{
+            background: #e0e0e0;
+            box-shadow: none;
+            outline: 0 none;
+        }
+        .form-horizontal .form-group i{
+            position: absolute;
+            top: 12px;
+            left: 60px;
+            font-size: 17px;
+            color: #c8c8c8;
+            transition : all 0.5s ease 0s;
+        }
+        .form-horizontal .form-control:focus + i{
+            color: #00b4ef;
+        }
+        .form-horizontal .fa-question-circle{
+            display: inline-block;
+            position: absolute;
+            top: 12px;
+            right: 60px;
+            font-size: 20px;
+            color: #808080;
+            transition: all 0.5s ease 0s;
+        }
+        .form-horizontal .fa-question-circle:hover{
+            color: #000;
+        }
+        .form-horizontal .main-checkbox{
+            float: left;
+            width: 20px;
+            height: 20px;
+            background: #11a3fc;
+            border-radius: 50%;
+            position: relative;
+            margin: 5px 0 0 5px;
+            border: 1px solid #11a3fc;
+        }
+        .form-horizontal .main-checkbox label{
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        .form-horizontal .main-checkbox label:after{
+            content: "";
+            width: 10px;
+            height: 5px;
+            position: absolute;
+            top: 5px;
+            left: 4px;
+            border: 3px solid #fff;
+            border-top: none;
+            border-right: none;
+            background: transparent;
+            opacity: 0;
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+        .form-horizontal .main-checkbox input[type=checkbox]{
+            visibility: hidden;
+        }
+        .form-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+            opacity: 1;
+        }
+        .form-horizontal .text{
+            float: left;
+            margin-left: 7px;
+            line-height: 20px;
+            padding-top: 5px;
+            text-transform: capitalize;
+        }
+        .form-horizontal .btn{
+            float: right;
+            font-size: 14px;
+            color: #fff;
+            background: #00b4ef;
+            border-radius: 30px;
+            padding: 10px 25px;
+            border: none;
+            text-transform: capitalize;
+            transition: all 0.5s ease 0s;
+        }
+        .col-sm-2 {
+        {% if not is_mobile %}
+          font-size: 16px;
+        {% else %}
+          font-size: 10px;
+          margin-left: 0px;
+          width: 60px;
+          float:left;
+        {% endif %}
+          vertical-align: text-bottom;
+        }
+        }
+        }
+        @media only screen and (max-width: 479px){
+            .form-horizontal .form-group{
+                padding: 0 25px;
+            }
+            .form-horizontal .form-group i{
+                left: 45px;
+            }
+            .form-horizontal .btn{
+                padding: 10px 20px;
+            }
+        }
+        .btn{
+            margin-right: 16px;
+        }
+    </style>
+
+    <style>
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height:1.5em;
+      color: #232323;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    h1, h2, h3 {
+      font-family: Times, serif;
+      line-height:1.5em;
+      border-bottom: 1px solid #ccc;
+    }
+    input[type='text']{
+        border:none;
+    }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style type="text/css">
+    {% if not is_mobile %}
+    .page {width:56%;height:100%;border: 2px;margin-top: 0px;margin-bottom: 0;margin-right: auto;margin-left: auto;}
+    {% else %}
+    .page {width:100%;border: 2px;margin-top: 0px;margin-bottom: 0;margin-right: auto;margin-left: auto;}
+    {% endif %}
+    /*.row {width:100%;}*/
+    </style>
+  </head>
+
+  <body>
+    <!-- Begin page content -->
+    <div class="page">
+    <div class="row">
+      <div class="col-md-offset-3 col-md-6">
+        <form name="id1" class="form-horizontal" role="form" action="show_problem" onsubmit="return check()" method="post">
+          <span class="heading">学生登录</span>
+          {% for message in get_flashed_messages() %}
+            <div class="flash alert alert-danger">{{ message }}</div>
+          {% endfor %}
+          <div class="form-group">
+            <label class="col-sm-2 control-label">学号:</label>
+            {% if is_mobile %}
+            <div class="col-sm-3">
+            {% else %}
+            <div class="col-sm-10">
+            {% endif %}
+            <input class="form-control" type="text" name="studentID" maxlength="10" placeholder="10位的学生学号,例如1301314512" onfocus="if(this.error){this.error=0;$('.flash').remove();}this.style.border='none';" error=0>
+            <!-- <i class="fa fa-lock"></i> -->
+            <!-- <a href="#" class="fa fa-question-circle"></a> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">姓名:</label>
+            {% if is_mobile %}
+            <div class="col-sm-3">
+            {% else %}
+            <div class="col-sm-10">
+            {% endif %}
+            <input class="form-control" type="text" name="studentName" maxlength="40" placeholder="姓名,例如张三" onfocus="if(this.error){this.error=0;$('.flash').remove();}this.style.border='none';" error=0>
+            <!-- <i class="fa fa-lock"></i> -->
+            <!-- <a href="#" class="fa fa-question-circle"></a> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">学院:</label>
+            {% if is_mobile %}
+            <div class="col-sm-3">
+            {% else %}
+            <div class="col-sm-10">
+            {% endif %}
+            <select id="department" name="department" class="show-tick form-control" >
+              {% for department in departments %}
+              <option value="{{department.departmentID}}">{{department.departmentName}}</option>
+              {% endfor %}
+            </select>
+            </div>
+          </div>
+          
+          <!-- <div class="form-group">
+            <label class="col-sm-2 control-label" style="alignment:left;">年级:</label>
+            {% if is_mobile %}
+            <div class="col-sm-3">
+            {% else %}
+            <div class="col-sm-10">
+            {% endif %}
+            <input class="form-control" type="text" name="grade" maxlength="4" placeholder="请输入你的年级" onfocus="if(this.error){this.error=0;$('.flash').remove();}this.style.border='none';" error=0>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" style="alignment:left;">班级:</label>
+            {% if is_mobile %}
+            <div class="col-sm-3">
+            {% else %}
+            <div class="col-sm-10">
+            {% endif %}
+            <input class="form-control" type="text" name="class" maxlength="2" placeholder="请输入你的班级" onfocus="if(this.error){this.error=0;$('.flash').remove();}this.style.border='none';" error=0>
+            </div>
+          </div> -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" style="alignment:left;">性别:</label>
+            {% if is_mobile %}
+            <div class="col-sm-3">
+            {% else %}
+            <div class="col-sm-10">
+            {% endif %}
+            <select id="sex" name="sex" class="show-tick form-control" >
+              <option value="0">男</option>
+              <option value="1">女</option>
+              <option value="2">其他</option>
+            </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" style="alignment:left;">生源所属地:</label>
+            {% if is_mobile %}
+            <div class="col-sm-3">
+            {% else %}
+            <div class="col-sm-10">
+            {% endif %}
+            <select id="home" name="home" class="show-tick form-control" >
+              <option value="0">东北</option>
+              <option value="1">西北</option>
+              <option value="2">华北</option>
+              <option value="3">华中</option>
+              <option value="4">华东</option>
+              <option value="5">华南</option>
+              <option value="6">西南</option>
+              <option value="7">台港澳</option>
+              <option value="8">留学生</option>
+            </select>
+            </div>
+          </div>
+          <div class="form-group">
+              <!-- <div class="main-checkbox">
+                  <input type="checkbox" value="None" id="checkbox1" name="check"/>
+                  <label for="checkbox1"></label>
+              </div>
+              <span class="text">Remember me</span> -->
+              <button type="submit" class="btn btn-primary" id="start">开始答题</button>
+          </div>
+        </form>
+      </div>
+    </div>
+{% if is_mobile %}
+    <div id="footer" style="margin-left: auto;margin-right: auto;width: 100%; position: relative;">
+{% else %}
+    <div id="footer" style="margin-left: auto;margin-right: auto;width: 56%;">
+{% endif %}
+      <hr style="margin-bottom: 3px;">
+      <center><label>Copyright &copy; Peking University JianzhongHe 2017</label></center>
+   </div>
+   </div>
+   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='loading.css') }}">
+   <div class="load-wrapp hide">
+     <div class="load-6" align="center">
+       <div class="letter-holder">
+         <span class="1-1 letter">正</span>
+         <span class="1-2 letter">在</span>
+         <span class="1-3 letter">登</span>
+         <span class="1-4 letter">陆</span>
+         <span class="1-5 letter">,</span>
+         <span class="1-6 letter">请</span>
+         <span class="1-7 letter">稍</span>
+         <span class="1-8 letter">后</span>
+         <span class="1-9 letter">.</span>
+         <span class="1-10 letter">.</span>
+         <span class="1-11 letter">.</span>
+       </div>
+     </div>
+   </div>
+ </body>
+
+ <script type="text/javascript">
+ function loading(){
+        //event.preventDefault();
+        var darken = "<div class='darken' style='display:none;'></div>";
+        $('body').prepend(darken);
+        $('.darken').delay().show(0).animate({ opacity: 0.5 }, 'fast');
+        $('.load-wrapp').removeClass('hide');
+    }
+     function check() {
+        // var country = document.forms["id1"]["country"].value;
+        // if(country==null||country==""){
+        //     $(".flash").remove();
+        //     $("<div class='flash alert alert-danger'></div>").insertAfter(".heading");
+        //     document.forms["id1"]["country"].style.border="1px solid red";
+        //     document.forms["id1"]["country"].error = 1;
+        //     $(".alert").html("国别不能为空,请输入国别!!!")
+        //     return false;
+        // }
+        // var grade = document.forms["id1"]["grade"].value;
+        // if(grade==null||grade==""){
+        //     $(".flash").remove();
+        //     $("<div class='flash alert alert-danger'></div>").insertAfter(".heading");
+        //     document.forms["id1"]["grade"].style.border="1px solid red";
+        //     document.forms["id1"]["grade"].error = 1;
+        //     $(".alert").html("年级不能为空,请输入班级!!!")
+        //     return false;
+        // }
+        // var grade = document.forms["id1"]["class"].value;
+        // if(grade==null||grade==""){
+        //     $(".flash").remove();
+        //     $("<div class='flash alert alert-danger'></div>").insertAfter(".heading");
+        //     document.forms["id1"]["class"].style.border="1px solid red";
+        //     document.forms["id1"]["class"].error = 1;
+        //     $(".alert").html("班级不能为空,请输入班级!!!")
+        //     return false;
+        // }
+        var x = document.forms["id1"]["studentID"].value;
+        if(x==null || x==""){
+            $(".flash").remove();
+            $("<div class='flash alert alert-danger'></div>").insertAfter(".heading");
+            document.forms["id1"]["studentID"].style.border="1px solid red";
+            document.forms["id1"]["studentID"].error = 1;
+            $(".alert").html("学号为空, 请输入学号!!!")
+            return false;
+        }
+        // alert(isNaN(x));
+        if(x.length < 10){
+            $(".flash").remove();
+            $("<div class='flash alert alert-danger'></div>").insertAfter(".heading");
+            document.forms["id1"]["studentID"].style.border="1px solid red";
+            document.forms["id1"]["studentID"].error = 1;
+            $(".alert").html("你输入的学号有误, 请输入10位的学号!!!");
+            return false;
+        }
+        if(isNaN(x)){
+            $(".flash").remove();
+            $("<div class='flash alert alert-danger'></div>").insertAfter(".heading");
+            document.forms["id1"]["studentID"].style.border="1px solid red";
+            document.forms["id1"]["studentID"].error = 1;
+            $(".alert").html("你输入的学号有误, 请输入正确的学号!!!");
+            return false;
+        }
+        var c = x[0]+x[1];
+        // alert(c);
+        if(c<12||c>18){
+            $(".flash").remove();
+            $("<div class='flash alert alert-danger'></div>").insertAfter(".heading");
+            document.forms["id1"]["studentID"].style.border="1px solid red";
+            document.forms["id1"]["studentID"].error = 1;
+            $(".alert").html("你输入的学号有误, 请输入正确的学号!!!");
+            return false;
+        }
+        x = document.forms["id1"]["studentName"].value;
+        if(x == null || x == ""){
+            $(".flash").remove();
+            $("<div class='flash alert alert-danger'></div>").insertAfter(".heading");
+            document.forms["id1"]["studentName"].style.border="1px solid red";
+            document.forms["id1"]["studentName"].error = 1;
+            $(".alert").html("姓名不能为空,请输入您的姓名!!!")
+            return false;
+        }
+        loading();
+     }
+ </script>
+</html>

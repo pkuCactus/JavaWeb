@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block body %}
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(#value).html("sd")
+  })
+</script>
+  {% if session.logged_in %}
+    <form action="{{ url_for('add_table') }}" method="post" class="add-entry">
+      <dl>
+        <dt><lable class="label">table name:</lable>
+        <input type="text" size="30" name="table_name">
+        <dt><label class="label">table field</label>
+        <dd>field1:<input type="text" size="30" name="departmentName" placeholder="name">
+        <select>
+          <option value="0">integer</option>
+          <option value="1">string</option>
+          <option value="2">numeric</option>
+          <option value="3">real</option>
+          <option value="4">text</option>
+        </select>
+        <select>
+          <option value="0"></option>
+          <option value="1">primary key</option>
+          <option value="2">foreign key</option>
+        </select>
+        <select>
+          <option value="0"></option>
+          <option value="1">auto increment</option>
+        </select>
+        <select id="value">
+          <option value="0">default</option>
+          <option value="1">not null</option>
+        </select>
+        </dd>
+        <dd><input type="submit" value="submit"></dd>
+      </dl>
+    </form>
+  {% endif %}
+  <ul class="entries">
+  {% for table in tables %}
+    <li><h2>{{ table.name }}</h2></li>
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

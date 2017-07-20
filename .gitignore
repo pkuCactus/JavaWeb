@@ -34,3 +34,6 @@
 #python 
 *.pyc
 *.npy
+
+#temp files
+*~

@@ -466,14 +466,14 @@
         remain = remain - 1;
         $('#minute').html(checkTime(Math.floor(remain/60)));
         $('#second').html(checkTime(Math.floor(remain%60)));
-        // if(remain <= 0){
-        //   //submit
-        //   var darken = "<div class='darken' style='display:none;'></div>";
-        //   $('body').prepend(darken);
-        //   $('.darken').delay().show(0).animate({ opacity: 0.8 }, 'fast');
-        //   submit_ans();
-        //   return;
-        // }
+        if(remain <= 0){
+          //submit
+          var darken = "<div class='darken' style='display:none;'></div>";
+          $('body').prepend(darken);
+          $('.darken').delay().show(0).animate({ opacity: 0.8 }, 'fast');
+          submit_ans();
+          return;
+        }
         setTimeout("count_time()", 1000);
       }
       function checkTime(t){

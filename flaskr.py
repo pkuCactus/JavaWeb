@@ -169,7 +169,7 @@ def show_problem():
         session['studentID'] = studentID
         session['department'] = department
         session['studentName'] = studentName
-    print request.form
+    # print request.form
     st1 = students.find_first('where studentID=?', studentID)
     st = students.find_first('where studentID=? and studentName=? and studentDepartment=? and home=? and sex=?',
                              studentID, studentName, department, request.form['home'], request.form['sex'])
@@ -209,8 +209,8 @@ def show_problem():
         return redirect(url_for('index'))
     # is_finish = 0
     if stu:
-        login_time = stu.logintime
-        diff = time.time() - time.mktime(login_time.timetuple())
+        login_time = time.mktime(stu.logintime.timetuple())
+        diff = time.time() - login_time
         if stu.finished or diff >= 3600:
             # 登陆过并且已经作答完毕
             return render_template('show_res.html',
@@ -220,7 +220,7 @@ def show_problem():
             pass
     else:
         # 第一次登录
-        diff = 0
+        login_time = time.time()
         with db.transaction():
             stu = students(studentID=studentID,
                            studentName=studentName,
@@ -248,7 +248,7 @@ def show_problem():
     param['question_num1'] = len(param['question1'])
     param['question_num'] = len(param['question'])
     param['numperpage'] = 10
-    param['remain'] = 3600 - diff
+    param['login_time'] = login_time
     # print param['question']
     return render_template('show_problem.html', param=param)
 
@@ -388,6 +388,11 @@ def result():
                      session.get('studentID'),
                      session.get('studentName')]
     return render_template('show_res.html', param=param)
+
+
+@app.route('/get_time', methods=['GET'])
+def get_time():
+    return str(time.time())
 
 
 @app.route('/')

@@ -220,7 +220,7 @@ def show_problem():
             pass
     else:
         # 第一次登录
-        diff = 3600
+        diff = 0
         with db.transaction():
             stu = students(studentID=studentID,
                            studentName=studentName,
@@ -356,33 +356,37 @@ def update_data():
 def result():
     if request.method == 'GET':
         return '<html><h1>404!!你访问的页面不存在</h1><body></body></html>'
-    print request.form
+    # print request.form
     studentID = session.get('studentID')
     with db.transaction():
         for x in request.form:
             quesID = re.match('ques([0-9]*).*', x).group(1)
-            quesID = int(quesID) + 1
+            # quesID = int(quesID) + 1
             ans = request.form.getlist(x)
             if len(ans) > 1:
                 ans = ';'.join(ans)
             else:
                 ans = ans[0]
+            # print studentID, quesID, ans
             stu_ques = student_ques(studentID=studentID,
                                     questionID=quesID,
                                     answer=ans)
-            print stu_ques
+            # print stu_ques
             try:
                 stu_ques.insert()
             except Exception, e:
-                print e
-                return e
-    stu = students(studentID=studentID,
-                   finished=True)
-    stu.update()
+                # print e.message, e
+                if 'Duplicate entry' in str(e):
+                    break
+                else:
+                    return '1'
+        db.update('update `students` set finished = 1 '
+                  'where studentID = %s' % (studentID))
     param = dict()
     param['is_mobile'] = util.checkMobile(request)
-    param['user'] = [session.get('department'),
-                     session.get('studentID')]
+    param['user'] = [departments.get(session.get('department')).departmentName,
+                     session.get('studentID'),
+                     session.get('studentName')]
     return render_template('show_res.html', param=param)
 
 

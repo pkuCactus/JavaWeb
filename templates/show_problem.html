@@ -516,24 +516,24 @@
    {% else %}
    <div class="row">
    <div>
-     <div class="title"><h4>{{kth}}. &nbsp; {{param.question[kth].title}}? &emsp;[{{param.question[kth].type}}]</h4></div>
+     <div class="title" id="ques{{param.question[kth].questionID}}"><h4>{{kth}}. &nbsp; {{param.question[kth].title}}? &emsp;[{{param.question[kth].type}}]</h4></div>
     {% if param.question[kth].type != 'option answer' %}
     {% set k = 1 %}
     {% for option in param.question[kth].option %}
      <div class="inputs">
     <span class="option_item">
     {% if param.question[kth].type == 'single select' %}
-     <input type="radio" name="ques{{kth}}" id="q{{kth}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress(this)"> &nbsp;
+     <input type="radio" name="ques{{param.question[kth].questionID}}" id="q{{param.question[kth].questionID}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress(this)"> &nbsp;
     {% else %}
-    <input type="checkbox" name="ques{{kth}}" id="q{{kth}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress(this)"> &nbsp;
+    <input type="checkbox" name="ques{{param.question[kth].questionID}}" id="q{{param.question[kth].questionID}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress(this)"> &nbsp;
     {% endif %}
-     <label for="q{{kth}}-{{k}}"> &nbsp;{{option}}</label>
+     <label for="q{{param.question[kth].questionID}}-{{k}}"> &nbsp;{{option}}</label>
      </span>
     </div>
     {% set k=k+1 %}
     {% endfor %}
     {% else %}
-    <textarea class="form-control" name="ques{{kth}}" id="q{{kth}}" style="margin-top: 20px;width: 90%;margin-left: 5%;" rows="6" placeholder="your suggestions" oninput="show_progress(this)"></textarea>
+    <textarea class="form-control" name="ques{{param.question[kth].questionID}}" id="q{{param.question[kth].questionID}}" style="margin-top: 20px;width: 90%;margin-left: 5%;" rows="6" placeholder="your suggestions" oninput="show_progress(this)"></textarea>
     {% endif %}
     </div>
     </div>
@@ -564,7 +564,7 @@
        <div class="progress-bar" id="bar1" style="width: 0%;margin-top: 0px;"> <span class="sr-only">60% Complete</span> </div>
    </div>
    <div class="page-header" style="margin-top:0px;" id="top1" name="top1">
-        <p>欢迎您,{{param.user[0]}}的同学,{{param.user[1]}} {{param.user[2]}}!<a href="{{url_for('index')}}" style="float: right;">返回</a></p>
+        <p>欢迎您,{{param.user[0]}}的,{{param.user[1]}} {{param.user[2]}}同学!<a href="{{url_for('index')}}" style="float: right;">返回</a></p>
         <h2><p><center><a href="http://www.pku.edu.cn" target="new_blank">北京大学</a> 《文科计算机基础》课前测试及选课指导 </center></p></h2>
    </div>
   
@@ -577,24 +577,24 @@
    {% else %}
    <div class="row">
    <div>
-     <div class="title"><h4>{{kth}}. &nbsp; {{param.question1[kth].title}}? &emsp;[{{param.question1[kth].type}}]</h4></div>
+     <div class="title" id="ques{{param.question1[kth].questionID}}"><h4>{{kth}}. &nbsp; {{param.question1[kth].title}}? &emsp;[{{param.question1[kth].type}}]</h4></div>
     {% if param.question1[kth].type != 'option answer' %}
     {% set k = 1 %}
     {% for option in param.question1[kth].option %}
      <div class="inputs">
     <span class="option_item">
     {% if param.question1[kth].type == 'single select' %}
-     <input type="radio" name="ques1{{kth}}" id="q1-{{kth}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress1(this)"> &nbsp;
+     <input type="radio" name="ques{{param.question1[kth].questionID}}" id="q{{param.question1[kth].questionID}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress1(this)"> &nbsp;
     {% else %}
-    <input type="checkbox" name="ques1{{kth}}" id="q1-{{kth}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress1(this)"> &nbsp;
+    <input type="checkbox" name="ques{{param.question1[kth].questionID}}" id="q{{param.question1[kth].questionID}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress1(this)"> &nbsp;
     {% endif %}
-     <label for="q1-{{kth}}-{{k}}"> &nbsp;{{option}}</label>
+     <label for="q{{param.question1[kth].questionID}}-{{k}}"> &nbsp;{{option}}</label>
      </span>
     </div>
     {% set k=k+1 %}
     {% endfor %}
     {% else %}
-    <textarea class="form-control" name="ques1{{kth}}" id="q1-{{kth}}" style="margin-top: 20px;width: 90%;margin-left: 5%;" rows="6" placeholder="your suggestions" oninput="show_progress1(this)"></textarea>
+    <textarea class="form-control" name="ques{{param.question1[kth].questionID}}" id="q{{param.question1[kth].questionID}}" style="margin-top: 20px;width: 90%;margin-left: 5%;" rows="6" placeholder="your suggestions" oninput="show_progress1(this)"></textarea>
     {% endif %}
     </div>
     </div>
@@ -646,10 +646,27 @@
     $(".load-wrapp").removeClass('hide');
     $.post("{{url_for('result')}}", ans,
     function(data){
+      if(data=='1'){
+        alert('something wrong ^_^.');
+        $(".load-wrapp").addClass('hide');
+        $(".darken").remove();
+        return;
+      }
       document.write(data);
+    }).fail(function(){
+      alert("something wrong, please try it later.");
+      $(".load-wrapp").addClass('hide');
+      $(".darken").remove();
     });
    }
    var ans={};
+   $(function(){
+    var ques = $('.title');
+    for(var i=0;i<ques.length;++i){
+      ans[ques[i].id] = '';
+    }
+    // alert(ques[0].id);
+   });
    function show_progress(obj){
    	var question_num = {{param.question_num}};
     var w = $('#ontopDiv').width();
@@ -665,6 +682,7 @@
     // alert([$('.progress-bar').css("width"),$('.progress').width()]);
     // alert(ans[obj.name]);
     if(obj.type=='radio'){
+      alert(obj.name);
       if(!ans[obj.name])var progress = w_c/w + 1/question_num;
       ans[obj.name] = obj.value;
       // var x="input[type='radio'][name='".concat(obj.name+"']:checked");

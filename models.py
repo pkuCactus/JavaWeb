@@ -62,7 +62,7 @@ class students(Model):
     studentID = StringField(primary_key=True, 
         ddl='varchar(10)', updatable=False)
     studentName = StringField(ddl='varchar(40)', default='张三')
-    studentDepartment = StringField(ddl='varchar(50)', default='信息科学技术学院')
+    studentDepartment = StringField(ddl='varchar(50)', default='0048')
     home = StringField(ddl='varchar(50)', default='中国')
     # grade = IntegerField(ddl='bit', default=1)
     # classes = IntegerField(ddl='bit', default=1)

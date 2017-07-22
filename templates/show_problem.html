@@ -271,6 +271,14 @@
         height: 50px;
         line-height: 50px;
       }
+      .timer{
+        margin-top:20px;
+        margin-bottom: 20px;
+        background: #eeeeee;
+        color: red;
+        height: 50px;
+        line-height: 50px;
+      }
     {% else %}
       .navigation{
         position: fixed;
@@ -305,6 +313,15 @@
         line-height: 50px;
         background: #eeeeee;
       }
+      .timer{
+        display: inline-block;
+        vertical-align: top;
+        float: right;
+        height: 50px;
+        line-height: 50px;
+        background: #eeeeee;
+        color: red;
+      }
     {% endif %}
     </style>
     <script type="text/javascript">
@@ -318,6 +335,7 @@
       {% endif %}
       var pages = {{pages}};
       var pages1 = {{pages1}};
+
     	$(document).ready(function(){
     		$('#all').html(pages);
         $('#all1').html(pages1);
@@ -439,14 +457,36 @@
           $(".part3").css("background","#ffeeee");
         }
       }
+      var remain = {{param.remain}};
+      function count_time(){
+        remain = remain - 1;
+        $('#minute').html(checkTime(Math.floor(remain/60)));
+        $('#second').html(checkTime(Math.floor(remain%60)));
+        if(remain == 0){
+          //submit
+          var darken = "<div class='darken' style='display:none;'></div>";
+          $('body').prepend(darken);
+          $('.darken').delay().show(0).animate({ opacity: 0.8 }, 'fast');
+          submit_ans();
+          return;
+        }
+        setTimeout("count_time()", 1000);
+      }
+      function checkTime(t){
+        if(t<10)
+          t="0"+t;
+        return t;
+      }
+      // setTimeout("count_time()", 500);
     </script>
 </head>
-<body>
+<body onload="count_time()">
    <!-- Begin page content -->
    <div class="navigation">
      <div class="part1"><a class="p p1" href="javascript:void(0)" onclick="show(1)">part1</a></div>
      <div class="part2"><a class="p p2" href="javascript:void(0)" onclick="show(2)">part2</a></div>
      <div class="part3"><a class="p p3" href="javascript:void(0)" onclick="show(3)">part3</a></div>
+     <div class="timer" id="timer"><label id="minute"></label>&nbsp;:&nbsp;<label id="second"></label></div>
    </div>
 
    <!-- part1 -->

@@ -169,10 +169,11 @@ def show_problem():
         session['studentID'] = studentID
         session['department'] = department
         session['studentName'] = studentName
-    department = departments.get(department).departmentName
+    print request.form
+    st1 = students.find_first('where studentID=?', studentID)
     st = students.find_first('where studentID=? and studentName=? and studentDepartment=? and home=? and sex=?',
                              studentID, studentName, department, request.form['home'], request.form['sex'])
-    if not st:
+    if st1 and not st:
         flash(u"输入的信息与之前不符,请重新输入")
         jsfile = os.listdir('./static/dist/js/i18n')
         session.pop('studentID', None)
@@ -188,23 +189,29 @@ def show_problem():
                                departments=all_departments,
                                jsfile=jsfile,
                                is_mobile=is_mobile)
-    param = {}
+
     # if studentID == '' or not studentID:
     #     flash(u'你的学号不正确, 请重新输入!!!')
     #     return redirect(url_for('index'))
     # if len(studentID) < 10:
     #     flash(u'您输入的学号有误, 请输入10位学号')
     #     return redirect(url_for('index'))
-    stu = students.get(studentID)
-    param['user'] = [department, studentID, studentName]
+
+    param = {}
+    departmentName = departments.get(department).departmentName
+    param['user'] = [departmentName, studentID, studentName]
     param['is_mobile'] = util.checkMobile(request)
+
+    stu = students.get(studentID)
     if studentID == '' or not studentID \
        or request.form['home'] == '' or not request.form['home']:
         flash(u'学号/班级/国别不能维空')
         return redirect(url_for('index'))
     # is_finish = 0
     if stu:
-        if stu.finished:
+        login_time = stu.logintime
+        diff = time.time() - time.mktime(login_time.timetuple())
+        if stu.finished or diff >= 3600:
             # 登陆过并且已经作答完毕
             return render_template('show_res.html',
                                    param=param)
@@ -213,6 +220,7 @@ def show_problem():
             pass
     else:
         # 第一次登录
+        diff = 3600
         with db.transaction():
             stu = students(studentID=studentID,
                            studentName=studentName,
@@ -240,6 +248,7 @@ def show_problem():
     param['question_num1'] = len(param['question1'])
     param['question_num'] = len(param['question'])
     param['numperpage'] = 10
+    param['remain'] = 3600 - diff
     # print param['question']
     return render_template('show_problem.html', param=param)
 

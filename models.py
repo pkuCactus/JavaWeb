@@ -70,6 +70,21 @@ class students(Model):
     finished = BooleanField(default=False)
     logintime = TimeField(updatable=False,
         default=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+"""
+['__add__', '__class__', '__delattr__', '__doc__', '__eq__', 
+'__format__', '__ge__', '__getattribute__', '__gt__', 
+'__hash__', '__init__', '__le__', '__lt__', '__ne__', 
+'__new__', '__radd__', '__reduce__', '__reduce_ex__', 
+'__repr__', '__rsub__', '__setattr__', '__sizeof__', 
+'__str__', '__sub__', '__subclasshook__', 'astimezone', 
+'combine', 'ctime', 'date', 'day', 'dst', 'fromordinal', 
+'fromtimestamp', 'hour', 'isocalendar', 'isoformat', 
+'isoweekday', 'max', 'microsecond', 'min', 'minute', 
+'month', 'now', 'replace', 'resolution', 'second', 
+'strftime', 'strptime', 'time', 'timetuple', 'timetz', 
+'today', 'toordinal', 'tzinfo', 'tzname', 'utcfromtimestamp', 
+'utcnow', 'utcoffset', 'utctimetuple', 'weekday', 'year']
+"""
 
 class question(Model):
     """

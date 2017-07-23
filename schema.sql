@@ -15,6 +15,7 @@ create table students (
   `studentDepartment` varchar(50) not null,
   `home` varchar(50) not null,
   `sex` integer not null,
+  `score` integer not null default 0,
   `finished` boolean default 0,
   `logintime` DateTime not null default current_timestamp
 )engine=innodb default charset=utf8;
@@ -33,6 +34,7 @@ create table question(
   `type` integer not null default 0,
   `createtime` DateTime not null default current_timestamp,
   `altertime` DateTime not null default current_timestamp,
+  `right_ans` varchar(100) not null default '',
   score integer,
   difficult integer,
   part integer

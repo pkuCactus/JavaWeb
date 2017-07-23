@@ -67,7 +67,7 @@ class students(Model):
     # grade = IntegerField(ddl='bit', default=1)
     # classes = IntegerField(ddl='bit', default=1)
     sex = IntegerField(ddl='integer', default=0)
-    # score = IntegerField(ddl='integer', default=0)
+    score = IntegerField(ddl='integer', default=0)
     finished = BooleanField(default=False)
     logintime = TimeField(updatable=False,
         default=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
@@ -102,6 +102,7 @@ class question(Model):
     altertime = TimeField(updatable=False,
         default=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     score = IntegerField(ddl='integer')
+    right_ans = StringField(ddl='varchar(100)')
     difficult = IntegerField(ddl='integer')
     part = IntegerField(ddl='integer')
         

@@ -15,7 +15,8 @@ create table students (
   `studentDepartment` varchar(50) not null,
   `home` varchar(50) not null,
   `sex` integer not null,
-  `score` integer not null default 0,
+  `score_part2` integer not null default 0,
+  `score_part3` integer not null default 0,
   `finished` boolean default 0,
   `logintime` DateTime not null default current_timestamp
 )engine=innodb default charset=utf8;

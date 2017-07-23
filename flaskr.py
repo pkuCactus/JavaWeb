@@ -213,6 +213,13 @@ def show_problem():
         diff = time.time() - login_time
         if stu.finished or diff >= 3600:
             # 登陆过并且已经作答完毕
+            if stu.score_part2 < 15 or stu.score_part2 + stu.score_part3 < 20:
+                param['suggestion'] = '建议: 选择基础班'
+            elif (stu.score_part2 > 25 and stu.score_part3 > 10)\
+                    or stu.score_part2 + stu.score_part3 > 40:
+                param['suggestion'] = '建议: 选择实验班'
+            else:
+                param['suggestion'] = '建议: 选择普通班'
             return render_template('show_res.html',
                                    param=param)
         else:

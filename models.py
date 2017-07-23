@@ -67,7 +67,8 @@ class students(Model):
     # grade = IntegerField(ddl='bit', default=1)
     # classes = IntegerField(ddl='bit', default=1)
     sex = IntegerField(ddl='integer', default=0)
-    score = IntegerField(ddl='integer', default=0)
+    score_part2 = IntegerField(ddl='integer', default=0)
+    score_part3 = IntegerField(ddl='integer', default=0)
     finished = BooleanField(default=False)
     logintime = TimeField(updatable=False,
         default=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))

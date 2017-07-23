@@ -162,7 +162,8 @@ CREATE TABLE `students` (
   `studentDepartment` varchar(50) NOT NULL,
   `home` varchar(50) NOT NULL,
   `sex` int(11) NOT NULL,
-  `score` int(11) NOT NULL DEFAULT '0',
+  `score_part2` int(11) NOT NULL DEFAULT '0',
+  `score_part3` int(11) NOT NULL DEFAULT '0',
   `finished` tinyint(1) DEFAULT '0',
   `logintime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`studentID`)
@@ -175,7 +176,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES ('1601214510','何建忠','0048','东北',0,0,1,'2017-07-23 02:15:08'),('1601214511','李四','0048','东北',0,0,1,'2017-07-23 00:54:18'),('1601214512','县道','0048','东北',0,0,0,'2017-07-23 19:17:05');
+INSERT INTO `students` VALUES ('1601214510','何建忠','0048','东北',0,0,0,1,'2017-07-23 02:15:08'),('1601214511','李四','0048','东北',0,0,0,1,'2017-07-23 00:54:18'),('1601214512','县道','0048','东北',0,0,0,0,'2017-07-23 19:17:05');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -188,4 +189,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-23 19:59:48
+-- Dump completed on 2017-07-23 20:12:18

@@ -463,7 +463,11 @@
       //   remain = 3600 - (data - {{param.login_time}});
       // });
       function count_time(){
-        remain = remain - 1;
+        // remain = remain - 1;
+        $.get("{{url_for('get_time')}}",function(data){
+          // alert(data);
+          remain = 3600 - (data - {{param.login_time}});
+        });
         $('#minute').html(checkTime(Math.floor(remain/60)));
         $('#second').html(checkTime(Math.floor(remain%60)));
         if(remain <= 0){

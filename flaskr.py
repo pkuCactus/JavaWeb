@@ -214,12 +214,12 @@ def show_problem():
         if stu.finished or diff >= 3600:
             # 登陆过并且已经作答完毕
             if stu.score_part2 < 15 or stu.score_part2 + stu.score_part3 < 20:
-                param['suggestion'] = '建议: 选择基础班'
+                param['suggestion'] = u'建议: 选择基础班'
             elif (stu.score_part2 > 25 and stu.score_part3 > 10)\
                     or stu.score_part2 + stu.score_part3 > 40:
-                param['suggestion'] = '建议: 选择实验班'
+                param['suggestion'] = u'建议: 选择实验班'
             else:
-                param['suggestion'] = '建议: 选择普通班'
+                param['suggestion'] = u'建议: 选择普通班'
             return render_template('show_res.html',
                                    param=param)
         else:
@@ -233,7 +233,8 @@ def show_problem():
                            studentName=studentName,
                            studentDepartment=department,
                            home=request.form['home'],
-                           sex=int(request.form['sex']))
+                           sex=int(request.form['sex']),
+                           logintime=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
             stu.insert()
     ques = question.find_all()
     ques0 = []
@@ -365,6 +366,7 @@ def result():
         return '<html><h1>404!!你访问的页面不存在</h1><body></body></html>'
     # print request.form
     studentID = session.get('studentID')
+    score = [0, 0]
     with db.transaction():
         for x in request.form:
             quesID = re.match('ques([0-9]*).*', x).group(1)
@@ -387,8 +389,10 @@ def result():
                     break
                 else:
                     return '1'
-        db.update('update `students` set finished = 1 '
-                  'where studentID = %s' % (studentID))
+            count_score(quesID, ans, score)
+        db.update('update `students` set finished = 1, '
+                  'score_part2 = %d, score_part3 = %d'
+                  'where studentID = %s' % (studentID, score[0], score[1]))
     param = dict()
     param['is_mobile'] = util.checkMobile(request)
     param['user'] = [departments.get(session.get('department')).departmentName,
@@ -408,6 +412,13 @@ def intro():
     param = {'is_mobile': util.checkMobile(request)}
     return render_template('intro.html', param=param)
 
+
+def count_score(quesID, ans, score):
+    q = question.get(quesID)
+    if q.part == 2 and q.ans == ans:
+        score[0] += q.score
+    elif q.ans == ans:
+        score[1] += q.score
 
 if __name__ == '__main__':
     from config import configs

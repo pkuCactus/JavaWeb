@@ -57,6 +57,18 @@ table.altrowstable td {
   <script src="{{url_for('static', filename='jquery-1.11.1.min.js')}}"></script>
   <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
+
+function getCheckBoxValue(){
+		var obj = document.getElementsByName("answer");//选择所有name="interest"的对象，返回数组
+            var s='';//如果这样定义var s;变量s中会默认被赋个null值
+            for(var i=0;i<obj.length;i++){
+                 if(obj[i].checked) //取到对象数组后，我们来循环检测它是不是被选中
+                 s+=obj[i].value;   //如果选中，将value添加到变量s中
+			}
+		return s
+}
+
+
 function select(){
   {% if not session.username %}
   return;
@@ -98,21 +110,24 @@ function select(){
     $("#del_ques").addClass("hide");
   }
 }
+
+
+
 $(function(){
   $("table tr").click(select);
 });
 function altRows(id){
-  if(document.getElementsByTagName){  
-    
-    var table = document.getElementById(id);  
-    var rows = table.getElementsByTagName("tr"); 
-     
-    for(i = 0; i < rows.length; i++){          
+  if(document.getElementsByTagName){
+
+    var table = document.getElementById(id);
+    var rows = table.getElementsByTagName("tr");
+
+    for(i = 0; i < rows.length; i++){
       if(i % 2 == 0){
         rows[i].className = "evenrowcolor";
       }else{
         rows[i].className = "oddrowcolor";
-      }      
+      }
     }
   }
 }
@@ -125,6 +140,10 @@ window.onload=function(){
   altRows('department');
   altRows('question');
 }
+
+
+
+
 function change1(){
   var x = document.getElementById('ADD');
   if(x.innerHTML=='ADD'){
@@ -303,6 +322,7 @@ $(document).ready(function (){
     data[3] = $("#hard").val(),
     data[4] = $("#part").val(),
     data[5] = $("#score").val();
+    data[6] = getCheckBoxValue();
     data[1] = data[1].replace(/；/g,";");
     
     // alert(data);
@@ -344,9 +364,9 @@ $(document).ready(function (){
         $('.flash2').html("insert to table successfully");
         var rows = document.getElementById("question").rows.length;
         if(rows%2==0){
-        $("#question").append($("<tr class='evenrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"question\"></td><td>"+data[0]+"</td>"+"<td>"+data[1].replace(/;/g,"<br>")+"<br></td>"+"<td>"+data[2]+"</td>"+"<td>"+data[3]+"</td>"+"<td>"+data[4]+"</td>"+"<td>"+data[5]+"</td>"+"</td></tr>").click(select));
+        $("#question").append($("<tr class='evenrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"question\"></td><td>"+data[0]+"</td>"+"<td>"+data[1].replace(/;/g,"<br>")+"<br></td>"+"<td>"+data[6]+"</td>"+"<td>"+data[2]+"</td>"+"<td>"+data[3]+"</td>"+"<td>"+data[4]+"</td>"+"<td>"+data[5]+"</td>"+"</td></tr>").click(select));
         }else{
-          $("#question").append($("<tr class='oddrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"question\"></td><td>"+data[0]+"</td>"+"<td>"+data[1].replace(/;/g,"<br>")+"<br></td>"+"<td>"+data[2]+"</td>"+"<td>"+data[3]+"</td>"+"<td>"+data[4]+"</td>"+"<td>"+data[5]+"</td>"+"</td></tr>").click(select));
+          $("#question").append($("<tr class='oddrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"question\"></td><td>"+data[0]+"</td>"+"<td>"+data[1].replace(/;/g,"<br>")+"<br></td>"+"<td>"+data[6]+"</td>"+"<td>"+data[2]+"</td>"+"<td>"+data[3]+"</td>"+"<td>"+data[4]+"</td>"+"<td>"+data[5]+"</td>"+"</td></tr>").click(select));
         }
       }
       else if(data_s.search("error")!=-1){
@@ -381,8 +401,6 @@ $(document).ready(function (){
 <div style="margin-top: 10px;margin-bottom: 10px;" class="hide add_depar"><span>DepartmentID:</span>&emsp;<input type="text" name="department" placeholder="departmentID"> <span style="margin-left: 10px;">DepartmentName:</span>&emsp;<input type="text" name="department" placeholder="departmentName"><button class="btn ntm-primary" style="margin-left: 40px;" id="add_depar">submit</button></div><!-- </form> -->
 </div>
 
-
-
 <div style="margin-top: 20px;">
   <div><label style="text-align: bottom;margin-top: 8px;">Question</label><button style="border-radius: 32px;margin-left: 10px;width:24px;height: 24px;padding: 0;" onclick="if($('#question').hasClass('hide')){$('#question').removeClass('hide');this.innerHTML='-';}else{$('#question').addClass('hide');this.innerHTML='+';$('input[type=checkbox][name=question]').attr('checked', false);$('#del_ques').addClass('hide');}">-</button>
   {% if session.username %}
@@ -392,10 +410,19 @@ $(document).ready(function (){
   </div>
   <table class="altrowstable" id="question" style="width:100%;">
 <tr id="title1">
-  <th width="20px" align="center" ><input type="checkbox" name="question" id="checkbox_ques"></th><th>QuestionTitle</th><th>Option</th><th>Type</th><th>Hard</th><th>Part</th><th>Score</th>
+  <th width="20px" align="center" ><input type="checkbox" name="question" id="checkbox_ques"></th><th>QuestionTitle</th><th>Option</th><th>Answer</th><th>Type</th><th>Hard</th><th>Part</th><th>Score</th>
 </tr>
 {% for question in questions %}
-  <tr onmouseover="this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor=this.background;" background=''><td><input type="checkbox" name="question"></td><td>{{question.title}}</td><td>{% for x in question.option %}{{x}}<br/>{%endfor%}</td><td>{{question.type}}</td><td>{{question.difficult}}</td><td>{{question.part}}</td><td>{{question.score}}</td></tr>
+  <tr onmouseover="this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor=this.background;" background=''>
+<td><input type="checkbox" name="question"></td>
+<td>{{question.title}}</td>
+<td>{% for x in question.option %}{{x}}<br/>{%endfor%}</td>
+<td>{{question.right_ans}}</td>
+<td>{{question.type}}</td>
+<td>{{question.difficult}}</td>
+<td>{{question.part}}</td>
+<td>{{question.score}}</td>
+</tr>
 {% endfor %}
 </table>
 <div style="margin-top: 10px;margin-bottom: 60px;" class="hide add_ques">
@@ -415,6 +442,15 @@ $(document).ready(function (){
 </div>
 
 <div style="float: left;margin-top: 15px;margin-left: 20px;">
+<span style="margin-left: 10px;">Answer:</span>&nbsp;
+<label><input name="answer" type="checkbox" value="A"/>A</label>
+<label><input name="answer" type="checkbox" value="B"/>B</label>
+<label><input name="answer" type="checkbox" value="C"/>C</label>
+<label><input name="answer" type="checkbox" value="D"/>D</label>
+<label><input name="answer" type="checkbox" value="E"/>E</label>
+</div>
+
+<div style="float: left;margin-top: 15px;margin-left: 20px;">
 <span style="margin-left: 10px;">Hard:</span>&nbsp;
 <select id="hard" style="font-size: 20px;width: 40px;">
   <option value="1"> I</option>
@@ -424,6 +460,7 @@ $(document).ready(function (){
   <option value="5"> V </option>
 </select>
 </div>
+
 
 <div style="float: left;margin-top: 15px; margin-left: 20px;">
 <span style="margin-left: 10px;">Part:</span>&nbsp;

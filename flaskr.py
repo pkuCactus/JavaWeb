@@ -2,18 +2,11 @@
 # -*- coding: UTF-8 -*-
 import os
 import time
-import cPickle
-import datetime
-import logging
 import optparse
 import tornado.wsgi
-import werkzeug
+import os.path as path
 import tornado.httpserver
-import numpy as np
-import pandas as pd
-from PIL import Image
-import cStringIO as StringIO
-import urllib
+
 from flask import Flask, request, session, \
     g, redirect, url_for, abort, \
     render_template, flash
@@ -80,7 +73,10 @@ def add_department():
 # @app.route('/')
 @app.route('/index')
 def index():
-    jsfile = os.listdir('./static/dist/js/i18n')
+
+    basepath=path.dirname(__file__)
+    jspath=path.join(basepath,'static/dist/js/i18n')
+    jsfile = os.listdir(jspath)
     session.pop('studentID', None)
     session.pop('department', None)
     session.pop('studentName', None)
@@ -175,7 +171,10 @@ def show_problem():
                              studentID, studentName, department, request.form['home'], request.form['sex'])
     if st1 and not st:
         flash(u"输入的信息与之前不符,请重新输入")
-        jsfile = os.listdir('./static/dist/js/i18n')
+        basepath = path.dirname(__file__)
+        jspath = path.join(basepath, 'static/dist/js/i18n')
+
+        jsfile = os.listdir(jspath)
         session.pop('studentID', None)
         session.pop('department', None)
         session.pop('studentName', None)
@@ -324,7 +323,9 @@ def update_data():
                     type=data[2],
                     difficult=data[3],
                     part=data[4],
-                    score=data[5]
+                    score=data[5],
+                    right_ans=data[6]
+
                 )
                 lg = log(
                     details=u'{} add {} into table question'

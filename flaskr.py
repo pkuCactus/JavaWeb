@@ -109,12 +109,48 @@ def show_entries():
                 q['type'] = 'multi select'
             else:
                 q['type'] = 'option answer'
+
     except Exception, e:
         questions = []
         flash('%s, please retry later' % e)
+    try:
+        all_students = students.find_all()
+        for s in all_students:
+            if s['sex'] == 0:
+                s['sex'] = 'male'
+            else:
+                s['sex'] = 'female'
+            if s['finished'] == 0:
+                s['finished'] = 'unfinished'
+            else:
+                s['finished'] = 'finished'
+    except Exception, e:
+        all_students = []
+        flash('%s, please retry later' % e)
+
     return render_template('show_entries.html',
                            departments=all_departments,
-                           questions=questions)
+                           questions=questions,
+                           all_students=all_students)
+
+# @app.route('/show_students')
+# def show_students():
+#     try:
+#         all_students = students.find_all()
+#         for s in all_students:
+#             if s['sex'] == 0:
+#                 s['sex'] = 'male'
+#             else:
+#                 s['sex'] = 'female'
+#             if s['finished'] == 0:
+#                 s['finished'] = 'unfinished'
+#             else:
+#                 s['finished'] = 'finished'
+#     except Exception, e:
+#         all_students = []
+#         flash('%s, please retry later' % e)
+#     return render_template('show_students.html',
+#                            all_students=all_students)
 
 
 @app.route('/logout')

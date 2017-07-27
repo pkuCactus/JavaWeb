@@ -41,7 +41,7 @@ table.altrowstable td {
   }
 </style>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> 
+    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 
@@ -114,7 +114,7 @@ function select(){
 
 
 $(function(){
-  $("table tr").click(select);
+  $("table tr").click(select());
 });
 function altRows(id){
   if(document.getElementsByTagName){
@@ -137,6 +137,7 @@ window.onload=function(){
   var h = window.innerHeight;
   $('.page').css('min-height', h);
 });
+  altRows('student');
   altRows('department');
   altRows('question');
 }
@@ -324,7 +325,7 @@ $(document).ready(function (){
     data[5] = $("#score").val();
     data[6] = getCheckBoxValue();
     data[1] = data[1].replace(/；/g,";");
-    
+
     // alert(data);
     //check the data
     if(data[0]==null || data[0]==""){
@@ -381,7 +382,50 @@ $(document).ready(function (){
 });
 </script>
 
+{% if session.username %}
 <div>
+
+
+            <div><label style="text-align: bottom;margin-top: 8px;">Student</label>
+                <button style="border-radius: 32px;margin-left: 10px;width:24px;height: 24px;padding: 0;"
+                        onclick="if($('#student').hasClass('hide')){$('#student').removeClass('hide');this.innerHTML='-';}else{$('#student').addClass('hide');this.innerHTML='+';$('input[type=checkbox][name=student]').attr('checked', false);}">
+                    -
+                </button>
+            </div>
+            <table class="altrowstable" id="student" style="width:100%;">
+
+
+                <tr id="title2">
+                    <th width="20px" align="center"><input type="checkbox" name="student" id="checkbox_stus"></th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Home</th>
+                    <th>Sex</th>
+                    <th>Socre_part2</th>
+                    <th>Socre_part3</th>
+                    <th>Status</th>
+                    <th>Logintime</th>
+                </tr>
+                {% for student in all_students %}
+                    <tr onmouseover="this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';"
+                        onmouseout="this.style.backgroundColor=this.background;" background=''>
+                        <td><input type="checkbox" name="student"></td>
+                        <td>{{ student.studentID }}</td>
+                        <td>{{ student.studentName }}</td>
+                        <td>{{ student.studentDepartment }}</td>
+                        <td>{{ student.home }}</td>
+                        <td>{{ student.sex }}</td>
+                        <td>{{ student.socre_part2 }}</td>
+                        <td>{{ student.socre_part3 }}</td>
+                        <td>{{ student.finished }}</td>
+                        <td>{{ student.logintime }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+
+
   <div><label style="text-align: bottom;margin-top: 8px;">Departments</label>
   <button style="border-radius: 32px;margin-left: 10px;width:24px;height: 24px;padding: 0;" onclick="if($('#department').hasClass('hide')){$('#department').removeClass('hide');this.innerHTML='-';}else{$('#department').addClass('hide');this.innerHTML='+';$('input[type=checkbox][name=department]').attr('checked', false);$('#del_depar').addClass('hide');}">-</button>
   {%if session.username %}
@@ -397,6 +441,22 @@ $(document).ready(function (){
   <tr onmouseover="this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor=this.background;" background=''><td><input type="checkbox" name="department"></td><td>{{department.departmentID}}</td><td>{{department.departmentName}}</td></tr>
 {% endfor %}
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- <form action="{{ url_for('update_data') }}" method="post" name="login_form" onsubmit="return submit()" id="form1"> -->
 <div style="margin-top: 10px;margin-bottom: 10px;" class="hide add_depar"><span>DepartmentID:</span>&emsp;<input type="text" name="department" placeholder="departmentID"> <span style="margin-left: 10px;">DepartmentName:</span>&emsp;<input type="text" name="department" placeholder="departmentName"><button class="btn ntm-primary" style="margin-left: 40px;" id="add_depar">submit</button></div><!-- </form> -->
 </div>
@@ -480,4 +540,5 @@ $(document).ready(function (){
 </div>
 </div>
 </div>
+    {% endif %}
 {% endblock %}

@@ -54,6 +54,16 @@ def start_from_terminal(app_):
         start_tornado(app_, opts.port)
 
 
+def check(s2, s3):
+    if s2 < 15 or s2 + s3 < 20:
+        return u'建议: 选择基础班'
+    elif (s2 > 25 and s3 > 10) \
+            or s2 + s3 > 40:
+        return u'建议: 选择实验班'
+    else:
+        return u'建议: 选择普通班'
+
+
 # 添加学院到数据库中
 @app.route('/add_department', methods=['GET', 'POST'])
 def add_department():
@@ -248,13 +258,7 @@ def show_problem():
         diff = time.time() - login_time
         if stu.finished or diff >= 3600:
             # 登陆过并且已经作答完毕
-            if stu.score_part2 < 15 or stu.score_part2 + stu.score_part3 < 20:
-                param['suggestion'] = u'建议: 选择基础班'
-            elif (stu.score_part2 > 25 and stu.score_part3 > 10)\
-                    or stu.score_part2 + stu.score_part3 > 40:
-                param['suggestion'] = u'建议: 选择实验班'
-            else:
-                param['suggestion'] = u'建议: 选择普通班'
+            param['suggestion'] = check(stu.score_part2, stu.score_part3)
             return render_template('show_res.html',
                                    param=param)
         else:
@@ -379,7 +383,7 @@ def update_data():
                     data[i+1] = data[i+1].replace('<br>', ';')[:-1]
                     ques = question.find_first(
                         'where `title`=? and `option`=? and `type`=? and `difficult`=? and `part`=? and `score`=?',
-                        data[i], data[i+1], data[i+2], data[i+3], data[i+4], data[i+5]
+                        data[i], data[i+1], data[i+3], data[i+4], data[i+5], data[i+6]
                     )
                     lg = log(
                         details=u'{} delete {} from table question'
@@ -392,8 +396,8 @@ def update_data():
                     except Exception, e:
                         print e.message
                         return e.message
-                    i += 6
-
+                    i += 7
+    print 'delete ok'
     return 'success'
 
 
@@ -426,15 +430,18 @@ def result():
                     break
                 else:
                     return '1'
-            count_score(quesID, ans, score)
-        db.update('update `students` set finished = 1, '
-                  'score_part2 = %d, score_part3 = %d'
-                  'where studentID = %s' % (studentID, score[0], score[1]))
+            s = count_score(quesID, ans)
+            score[0] += s[0]
+            score[1] += s[1]
+        db.update(u'update `students` set finished = 1, '
+                  'score_part2 = %d, score_part3 = %d '
+                  'where studentID = %s' % (score[0], score[1], studentID))
     param = dict()
     param['is_mobile'] = util.checkMobile(request)
     param['user'] = [departments.get(session.get('department')).departmentName,
                      session.get('studentID'),
                      session.get('studentName')]
+    param['suggestion'] = check(score[0], score[1])
     return render_template('show_res.html', param=param)
 
 
@@ -450,12 +457,16 @@ def intro():
     return render_template('intro.html', param=param)
 
 
-def count_score(quesID, ans, score):
+def count_score(quesID, ans):
+    score = [0, 0]
     q = question.get(quesID)
-    if q.part == 2 and q.ans == ans:
-        score[0] += q.score
-    elif q.ans == ans:
-        score[1] += q.score
+    if len(ans) >= 1:
+        if q.part == 2 and (q.right_ans == ans or
+                            ord(q.right_ans) - 16 == ord(ans)):
+            score[0] += q.score
+        elif q.right_ans == ans or ord(q.right_ans) - 16 == ord(ans):
+            score[1] += q.score
+    return score
 
 if __name__ == '__main__':
     from config import configs

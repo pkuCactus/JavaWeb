@@ -383,7 +383,7 @@ def update_data():
                     data[i+1] = data[i+1].replace('<br>', ';')[:-1]
                     ques = question.find_first(
                         'where `title`=? and `option`=? and `type`=? and `difficult`=? and `part`=? and `score`=?',
-                        data[i], data[i+1], data[i+2], data[i+3], data[i+4], data[i+5]
+                        data[i], data[i+1], data[i+3], data[i+4], data[i+5], data[i+6]
                     )
                     lg = log(
                         details=u'{} delete {} from table question'
@@ -396,8 +396,8 @@ def update_data():
                     except Exception, e:
                         print e.message
                         return e.message
-                    i += 6
-
+                    i += 7
+    print 'delete ok'
     return 'success'
 
 

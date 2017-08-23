@@ -95,6 +95,17 @@ function select(obj){
                 $(this).removeAttr('checked')
             } )
         }
+    }else{
+      if($(input).attr('checked') != 'checked'){
+        var checkbox = $(table).find(':checkbox');
+        checkbox.each(
+          function(){
+            if($(this).hasClass('tableHead')){
+              $(this).removeAttr('checked');
+            }
+          }
+        );
+      }
     }
 
   var l1 = $("input[type=checkbox][name=department]").length;

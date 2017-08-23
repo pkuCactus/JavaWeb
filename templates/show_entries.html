@@ -69,38 +69,45 @@ function getCheckBoxValue(){
 }
 
 
-function select(){
+function select(obj){
+
+
   {% if not session.username %}
   return;
   {% endif %}
-  var input = $(this).find("input[type=checkbox]");
-  // alert(this.id.search("title"));
-  if(this.id.search("title")!=-1){
-    var table = this.parentNode.parentNode;
-    var x = table.getElementsByTagName("input");
-    var stat = x[0].checked;
-    // alert(!stat);
-    for(var i=0; i<x.length; i++){
-      x[i].checked = !stat;
+
+  var input = obj
+
+    //alert($(obj).attr('checked'))
+
+
+
+    var input = obj
+    var table = $(input).closest('table')
+
+    if ($(input).hasClass('tableHead')) {
+        if ($(input).attr('checked') == 'checked') {
+            $(table).find(':checkbox').each(function () {
+                $(this).attr('checked','checked')
+            } )
+        }else{
+            $(table).find(':checkbox').each(function () {
+                $(this).removeAttr('checked')
+            } )
+        }
     }
-  }
-  else if(input.is(":checked")){
-    var table = this.parentNode.parentNode;
-    var x = table.getElementsByTagName("input");
-    x[0].checked = false;
-    input.attr("checked", false);
-  }
-  else{
-     input.attr("checked", true);
-  }
+
   var l1 = $("input[type=checkbox][name=department]").length;
   var l2 = $("input[type=checkbox][name=department]:checked").length;
+
   if(l2){
     if(l1 == l2 + 1)$("#checkbox_depar").attr("checked", true);
     $("#del_depar").removeClass("hide");
-  }else{
+  }else                                                             {
     $("#del_depar").addClass("hide");
   }
+
+
   l1 = $("input[type=checkbox][name=question]").length;
   l2 = $("input[type=checkbox][name=question]:checked").length;
   if(l2){
@@ -109,13 +116,134 @@ function select(){
   }else{
     $("#del_ques").addClass("hide");
   }
+
 }
 
 
 
 $(function(){
-  $("table tr").click(select());
+
+
+
+    $(":checkbox").click(function () {
+
+        select(this)
+
+    });
+
+    {% if not session.username %}
+  $("input[type=checkbox]").attr("disabled", true);
+  {% endif %}
+
+  $("button").click(function (){
+
+
+  if(this.id=="add_depar"){
+    var input = document.getElementsByName("department");
+    var value = check(input);
+    if(!value)return false;
+
+    $.post("{{url_for('update_data')}}",
+    {
+      operation: 'add',
+      table: 'department',
+      'data[]': value
+    },
+    function(data){
+      $('.flash1').remove();
+      $("<div class='flash alert alert-danger flash1' style='margin-top:10px;'></div>").insertAfter("#department");
+      if(data=="success"){
+        $('.flash1').html("insert to table successfully");
+        var rows = document.getElementById("department").rows.length;
+        if(rows%2==0){
+        $("#department").append($("<tr class='evenrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"department\"></td><td>"+value[0]+"</td>"+"<td>"+value[1]+"</td></tr>").click(select));
+        }else{
+          $("#department").append($("<tr class='oddrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"department\"></td><td>"+value[0]+"</td>"+"<td>"+value[1]+"</td></tr>").click(select));
+        }
+      }
+      else if(data.search("error")!=-1){
+        $('.flash1').html(data);
+      }else{
+        $('.flash2').html("something error, try it later.");return;
+        document.write(data);
+      }
+    });
+  }
+  else if(this.id=="add_ques"){
+    var data = new Array();
+    data[0] = $("#qt").val(),
+    data[1] = $("#opt").val(),
+    data[2] = $("#type").val(),
+    data[3] = $("#hard").val(),
+    data[4] = $("#part").val(),
+    data[5] = $("#score").val();
+    data[6] = getCheckBoxValue();
+    data[1] = data[1].replace(/；/g,";");
+
+    // alert(data);
+    //check the data
+    if(data[0]==null || data[0]==""){
+      $('.flash2').remove();
+      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
+      $(".flash2").html("question title can not be empty");
+      return false;
+    }else if(data[1]==null || data[1]==""){
+      $('.flash2').remove();
+      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
+      $(".flash2").html("question option can not be empty");
+      return false;
+    }else if(data[5]==null || data[5]==""){
+      $('.flash2').remove();
+      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
+      $(".flash2").html("score can not be empty");
+      return false;
+    }else if(isNaN(data[5])){
+      $('.flash2').remove();
+      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
+      $(".flash2").html("score must be integer");
+      return false;
+    }
+    $.post("{{url_for('update_data')}}",
+    {
+      operation: 'add',
+      table: 'question',
+      'data[]': data
+    },
+    function(data_s){
+      $('.flash2').remove();
+      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
+      if(data_s=="success"){
+        if(data[2]=="0")data[2]="single select";
+        else if(data[2]="1")data[2]="multi select";
+        else data[2]="option answer";
+        $('.flash2').html("insert to table successfully");
+        var rows = document.getElementById("question").rows.length;
+        if(rows%2==0){
+        $("#question").append($("<tr class='evenrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"question\"></td><td>"+data[0]+"</td>"+"<td>"+data[1].replace(/;/g,"<br>")+"<br></td>"+"<td>"+data[6]+"</td>"+"<td>"+data[2]+"</td>"+"<td>"+data[3]+"</td>"+"<td>"+data[4]+"</td>"+"<td>"+data[5]+"</td>"+"</td></tr>").click(select));
+        }else{
+          $("#question").append($("<tr class='oddrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"question\"></td><td>"+data[0]+"</td>"+"<td>"+data[1].replace(/;/g,"<br>")+"<br></td>"+"<td>"+data[6]+"</td>"+"<td>"+data[2]+"</td>"+"<td>"+data[3]+"</td>"+"<td>"+data[4]+"</td>"+"<td>"+data[5]+"</td>"+"</td></tr>").click(select));
+        }
+      }
+      else if(data_s.search("error")!=-1){
+        $('.flash2').html(data_s);
+      }else{
+        $('.flash2').html("something error, try it later.");return;
+        document.write(data_s);
+      }
+    });
+    $('input[name="answer"]').removeAttr('checked')
+      $('#qt').val('')
+      $('#opt').val('')
+  }
+  });
+
+
 });
+
+
+
+
+
 function altRows(id){
   if(document.getElementsByTagName){
 
@@ -222,13 +350,14 @@ function delete_question(){
       data[i] = tb.rows[j].cells[1].innerHTML;
       data[i+1] = tb.rows[j].cells[2].innerHTML;
       data[i+2] = tb.rows[j].cells[3].innerHTML;
-      if(data[i+2]=='single select')data[i+2]=0;
-      else if(data[i+2]=='multi select')data[i+2]=1;
-      else data[i+2]=2;
       data[i+3] = tb.rows[j].cells[4].innerHTML;
+      if(data[i+3]=='single select')data[i+3]=0;
+      else if(data[i+3]=='multi select')data[i+3]=1;
+      else data[i+3]=2;
       data[i+4] = tb.rows[j].cells[5].innerHTML;
       data[i+5] = tb.rows[j].cells[6].innerHTML;
-      i += 6;
+      data[i+6] = tb.rows[j].cells[7].innerHTML;
+      i += 7;
     }
   }
   if(!has_checked)return;
@@ -279,107 +408,8 @@ function check(input){
   }
   return data;
 }
-$(document).ready(function (){
-  {% if not session.username %}
-  $("input[type=checkbox]").attr("disabled", true);
-  {% endif %}
-  $("button").click(function (){
-    // alert("post data");
-  if(this.id=="add_depar"){
-    var input = document.getElementsByName("department");
-    var value = check(input);
-    if(!value)return false;
-    $.post("{{url_for('update_data')}}",
-    {
-      operation: 'add',
-      table: 'department',
-      'data[]': value
-    },
-    function(data){
-      $('.flash1').remove();
-      $("<div class='flash alert alert-danger flash1' style='margin-top:10px;'></div>").insertAfter("#department");
-      if(data=="success"){
-        $('.flash1').html("insert to table successfully");
-        var rows = document.getElementById("department").rows.length;
-        if(rows%2==0){
-        $("#department").append($("<tr class='evenrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"department\"></td><td>"+value[0]+"</td>"+"<td>"+value[1]+"</td></tr>").click(select));
-        }else{
-          $("#department").append($("<tr class='oddrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"department\"></td><td>"+value[0]+"</td>"+"<td>"+value[1]+"</td></tr>").click(select));
-        }
-      }
-      else if(data.search("error")!=-1){
-        $('.flash1').html(data);
-      }else{
-        $('.flash2').html("something error, try it later.");return;
-        document.write(data);
-      }
-    });
-  }
-  else if(this.id=="add_ques"){
-    var data = new Array();
-    data[0] = $("#qt").val(),
-    data[1] = $("#opt").val(),
-    data[2] = $("#type").val(),
-    data[3] = $("#hard").val(),
-    data[4] = $("#part").val(),
-    data[5] = $("#score").val();
-    data[6] = getCheckBoxValue();
-    data[1] = data[1].replace(/；/g,";");
 
-    // alert(data);
-    //check the data
-    if(data[0]==null || data[0]==""){
-      $('.flash2').remove();
-      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
-      $(".flash2").html("question title can not be empty");
-      return false;
-    }else if(data[1]==null || data[1]==""){
-      $('.flash2').remove();
-      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
-      $(".flash2").html("question option can not be empty");
-      return false;
-    }else if(data[5]==null || data[5]==""){
-      $('.flash2').remove();
-      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
-      $(".flash2").html("score can not be empty");
-      return false;
-    }else if(isNaN(data[5])){
-      $('.flash2').remove();
-      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
-      $(".flash2").html("score must be integer");
-      return false;
-    }
-    $.post("{{url_for('update_data')}}",
-    {
-      operation: 'add',
-      table: 'question',
-      'data[]': data
-    },
-    function(data_s){
-      $('.flash2').remove();
-      $("<div class='flash alert alert-danger flash2' style='margin-top:10px;'></div>").insertAfter("#question");
-      if(data_s=="success"){
-        if(data[2]=="0")data[2]="single select";
-        else if(data[2]="1")data[2]="multi select";
-        else data[2]="option answer";
-        $('.flash2').html("insert to table successfully");
-        var rows = document.getElementById("question").rows.length;
-        if(rows%2==0){
-        $("#question").append($("<tr class='evenrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"question\"></td><td>"+data[0]+"</td>"+"<td>"+data[1].replace(/;/g,"<br>")+"<br></td>"+"<td>"+data[6]+"</td>"+"<td>"+data[2]+"</td>"+"<td>"+data[3]+"</td>"+"<td>"+data[4]+"</td>"+"<td>"+data[5]+"</td>"+"</td></tr>").click(select));
-        }else{
-          $("#question").append($("<tr class='oddrowcolor' onmouseover=\"this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';\" onmouseout=\"this.style.backgroundColor=this.background;\" background=''><td><input type=\"checkbox\" name=\"question\"></td><td>"+data[0]+"</td>"+"<td>"+data[1].replace(/;/g,"<br>")+"<br></td>"+"<td>"+data[6]+"</td>"+"<td>"+data[2]+"</td>"+"<td>"+data[3]+"</td>"+"<td>"+data[4]+"</td>"+"<td>"+data[5]+"</td>"+"</td></tr>").click(select));
-        }
-      }
-      else if(data_s.search("error")!=-1){
-        $('.flash2').html(data_s);
-      }else{
-        $('.flash2').html("something error, try it later.");return;
-        document.write(data_s);
-      }
-    });
-  }
-  });
-});
+
 </script>
 
 {% if session.username %}
@@ -433,26 +463,14 @@ $(document).ready(function (){
   <button id="del_depar" style="float: right;margin-right: 20px;" class="btn btn-primary hide" onclick="delete_department()">Delete</button>
   {% endif %}
   </div>
-<table class="altrowstable" id="department" style="width:100%;">
+<table class="altrowstable dataTable" id="department" style="width:100%;">
 <tr id="title">
-  <th width="20px" align="center" ><input type="checkbox" name="department" id="checkbox_depar"></th><th>DepartmentID</th><th>DepartmentName</th>
+  <th width="20px" align="center" ><input class="tableHead" type="checkbox" name="department" id="checkbox_depar"></th><th>DepartmentID</th><th>DepartmentName</th>
 </tr>
 {% for department in departments %}
   <tr onmouseover="this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor=this.background;" background=''><td><input type="checkbox" name="department"></td><td>{{department.departmentID}}</td><td>{{department.departmentName}}</td></tr>
 {% endfor %}
 </table>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -468,9 +486,9 @@ $(document).ready(function (){
   <button id="del_ques" style="float: right;margin-right: 20px;" class="btn btn-primary hide" onclick="delete_question()">Delete</button>
   {% endif %}
   </div>
-  <table class="altrowstable" id="question" style="width:100%;">
+  <table class="altrowstable dataTable" id="question" style="width:100%;">
 <tr id="title1">
-  <th width="20px" align="center" ><input type="checkbox" name="question" id="checkbox_ques"></th><th>QuestionTitle</th><th>Option</th><th>Answer</th><th>Type</th><th>Hard</th><th>Part</th><th>Score</th>
+  <th width="20px" align="center" ><input class="tableHead" type="checkbox" name="question" id="checkbox_ques"></th><th>QuestionTitle</th><th>Option</th><th>Answer</th><th>Type</th><th>Hard</th><th>Part</th><th>Score</th>
 </tr>
 {% for question in questions %}
   <tr onmouseover="this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor=this.background;" background=''>

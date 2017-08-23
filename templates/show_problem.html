@@ -457,6 +457,7 @@
           $(".part3").css("background","#ffeeee");
         }
       }
+      $(window).on("load", count_time());
       var remain = 3600 - ((new Date()).getTime()/1000 - {{param.login_time}});
       // $.get("{{url_for('get_time')}}",function(data){
       //   alert(data);

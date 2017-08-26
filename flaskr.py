@@ -380,7 +380,11 @@ def update_data():
             elif op == 'delete':
                 i = 1
                 while i < num:
-                    data[i+1] = data[i+1].replace('<br>', ';')[:-1]
+                    data[i+1] = data[i+1][:-2].replace('\n', '')
+                    k = 1
+                    for t in data:
+                        print k, t
+                        k += 1
                     ques = question.find_first(
                         'where `title`=? and `option`=? and `type`=? and `difficult`=? and `part`=? and `score`=?',
                         data[i], data[i+1], data[i+3], data[i+4], data[i+5], data[i+6]
@@ -390,13 +394,17 @@ def update_data():
                         .format(session.get('username'),
                                 data[i])
                     )
+                    print ques
                     try:
+                        print '13123'
                         ques.delete()
+                        print 'del'
                         lg.insert()
+                        print 'log'
                     except Exception, e:
-                        print e.message
+                        print e
                         return e.message
-                    i += 7
+                    i += 8
     print 'delete ok'
     return 'success'
 

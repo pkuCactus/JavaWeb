@@ -398,7 +398,7 @@
             $('#nxt1').removeClass('fadeInUp').addClass('hide fadeOutDown');
             $('#confirm').removeClass('hide');
           }
-          if(index1+1 <= pages1)$('#cur1').html(index+1);
+          if(index1+1 <= pages1)$('#cur1').html(index1+1);
         });
 		    $('#pre').click(function () {
           window.location.href="#top";
@@ -527,21 +527,21 @@
    {% else %}
    <div class="row">
    <div>
-     <div class="title" id="ques{{param.question[kth].questionID}}"><h4>{{kth}}. &nbsp; {{param.question[kth].title}}? &emsp;[{{param.question[kth].type}}]</h4></div>
+     <div class="title" id="ques{{param.question[kth].questionID}}"><h4>{{kth+1}}. &nbsp; {{param.question[kth].title}}? &emsp;[{{param.question[kth].type}}]</h4></div>
     {% if param.question[kth].type != 'option answer' %}
-    {% set k = 1 %}
+    <!-- {% set k = 1 %} -->
     {% for option in param.question[kth].option %}
      <div class="inputs">
     <span class="option_item">
     {% if param.question[kth].type == 'single select' %}
-     <input type="radio" name="ques{{param.question[kth].questionID}}" id="q{{param.question[kth].questionID}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress(this)"> &nbsp;
+     <input type="radio" name="ques{{param.question[kth].questionID}}" id="q{{param.question[kth].questionID}}-{{loop.index}}" class="option_item" value="{{loop.index}}" onclick="show_progress(this)"> &nbsp;
     {% else %}
-    <input type="checkbox" name="ques{{param.question[kth].questionID}}" id="q{{param.question[kth].questionID}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress(this)"> &nbsp;
+    <input type="checkbox" name="ques{{param.question[kth].questionID}}" id="q{{param.question[kth].questionID}}-{{loop.index}}" class="option_item" value="{{loop.index}}" onclick="show_progress(this)"> &nbsp;
     {% endif %}
-     <label for="q{{param.question[kth].questionID}}-{{k}}"> &nbsp;{{option}}</label>
+     <label for="q{{param.question[kth].questionID}}-{{loop.index}}"> &nbsp;{{option}}</label>
      </span>
     </div>
-    {% set k=k+1 %}
+    <!-- {% set k=k+1 %} -->
     {% endfor %}
     {% else %}
     <textarea class="form-control" name="ques{{param.question[kth].questionID}}" id="q{{param.question[kth].questionID}}" style="margin-top: 20px;width: 90%;margin-left: 5%;" rows="6" placeholder="your suggestions" oninput="show_progress(this)"></textarea>
@@ -588,21 +588,21 @@
    {% else %}
    <div class="row">
    <div>
-     <div class="title" id="ques{{param.question1[kth].questionID}}"><h4>{{kth}}. &nbsp; {{param.question1[kth].title}}? &emsp;[{{param.question1[kth].type}}]</h4></div>
+     <div class="title" id="ques{{param.question1[kth].questionID}}"><h4>{{kth+1}}. &nbsp; {{param.question1[kth].title}}? &emsp;[{{param.question1[kth].type}}]</h4></div>
     {% if param.question1[kth].type != 'option answer' %}
-    {% set k = 1 %}
+    <!-- {% set k = 1 %} -->
     {% for option in param.question1[kth].option %}
      <div class="inputs">
     <span class="option_item">
     {% if param.question1[kth].type == 'single select' %}
-     <input type="radio" name="ques{{param.question1[kth].questionID}}" id="q{{param.question1[kth].questionID}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress1(this)"> &nbsp;
+     <input type="radio" name="ques{{param.question1[kth].questionID}}" id="q{{param.question1[kth].questionID}}-{{loop.index}}" class="option_item" value="{{loop.index}}" onclick="show_progress1(this)"> &nbsp;
     {% else %}
-    <input type="checkbox" name="ques{{param.question1[kth].questionID}}" id="q{{param.question1[kth].questionID}}-{{k}}" class="option_item" value="{{k}}" onclick="show_progress1(this)"> &nbsp;
+    <input type="checkbox" name="ques{{param.question1[kth].questionID}}" id="q{{param.question1[kth].questionID}}-{{loop.index}}" class="option_item" value="{{loop.index}}" onclick="show_progress1(this)"> &nbsp;
     {% endif %}
-     <label for="q{{param.question1[kth].questionID}}-{{k}}"> &nbsp;{{option}}</label>
+     <label for="q{{param.question1[kth].questionID}}-{{loop.index}}"> &nbsp;{{option}}</label>
      </span>
     </div>
-    {% set k=k+1 %}
+    <!-- {% set k=k+1 %} -->
     {% endfor %}
     {% else %}
     <textarea class="form-control" name="ques{{param.question1[kth].questionID}}" id="q{{param.question1[kth].questionID}}" style="margin-top: 20px;width: 90%;margin-left: 5%;" rows="6" placeholder="your suggestions" oninput="show_progress1(this)"></textarea>

@@ -314,8 +314,8 @@ function delete_department(){
   for(var i=1, j=1;j<checked.length;++j){
     if(checked[j].checked){
       has_checked = true;
-      data[i] = tb.rows[j].cells[1].innerHTML;
-      data[i+1] = tb.rows[j].cells[2].innerHTML;
+      data[i] = tb.rows[j].cells[1].innerText;
+      data[i+1] = tb.rows[j].cells[2].innerText;
       i += 2;
     }
   }
@@ -358,16 +358,17 @@ function delete_question(){
   for(var i=1, j=1;j<checked.length;++j){
     if(checked[j].checked){
       has_checked = true;
-      data[i] = tb.rows[j].cells[1].innerHTML;
-      data[i+1] = tb.rows[j].cells[2].innerHTML;
-      data[i+2] = tb.rows[j].cells[3].innerHTML;
-      data[i+3] = tb.rows[j].cells[4].innerHTML;
+      document.write(tb.rows[j].cells[2].innerText);
+      data[i] = tb.rows[j].cells[1].innerText;
+      data[i+1] = tb.rows[j].cells[2].innerText;
+      data[i+2] = tb.rows[j].cells[3].innerText;
+      data[i+3] = tb.rows[j].cells[4].innerText;
       if(data[i+3]=='single select')data[i+3]=0;
       else if(data[i+3]=='multi select')data[i+3]=1;
       else data[i+3]=2;
-      data[i+4] = tb.rows[j].cells[5].innerHTML;
-      data[i+5] = tb.rows[j].cells[6].innerHTML;
-      data[i+6] = tb.rows[j].cells[7].innerHTML;
+      data[i+4] = tb.rows[j].cells[5].innerText;
+      data[i+5] = tb.rows[j].cells[6].innerText;
+      data[i+6] = tb.rows[j].cells[7].innerText;
       i += 7;
     }
   }
@@ -396,7 +397,7 @@ function delete_question(){
     else if(data.search("error")!=-1){
       $('.flash2').html(data);
     }else{
-      $('.flash2').html("something error, try it later.");return;
+      $('.flash2').html(/*"something error, try it later."*/data);return;
       document.write(data);
     }
   });
@@ -505,7 +506,7 @@ function check(input){
   <tr onmouseover="this.background=this.style.backgroundColor;this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor=this.background;" background=''>
 <td><input type="checkbox" name="question"></td>
 <td>{{question.title}}</td>
-<td>{% for x in question.option %}{{x}}<br/>{%endfor%}</td>
+<td>{% for x in question.option %}{{x}};<br/>{%endfor%}</td>
 <td>{{question.right_ans}}</td>
 <td>{{question.type}}</td>
 <td>{{question.difficult}}</td>
